@@ -118,6 +118,10 @@ function reset(){
     //add click handlers for buttons
     $('button.btn-success').click(addClicked);
     $('button.btn-default').click(cancelClicked);
+
+
+
+    //need to add initialized average and data in student table
 }
 
 
