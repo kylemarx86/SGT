@@ -6,6 +6,7 @@
  * @type {Array}
  */
 var student_array = [];
+
 /**
  * inputIds - id's of the elements that are used to add students
  * @type {string[]}
@@ -47,19 +48,30 @@ function addStudent() {
         studentGrade: $('#studentGrade').val()
     };
     student_array.push(studentInfo);
+
+    clearAddStudentForm();
 }
 
 /**
  * clearAddStudentForm - clears out the form values based on inputIds variable
  */
+function clearAddStudentForm() {
+    $('#studentName').val('');
+    $('#course').val('');
+    $('#studentGrade').val('');
+}
 
 /**
  * calculateAverage - loop through the global student array and calculate average grade and return that value
  * @returns {number}
  */
 function calculateAverage() {
-    var average = null;
-    return 'this is not the average you\'re looking for';
+    var sum = 0;
+
+    for(var i = 0; i < student_array.length; i++){
+        sum += parseInt(student_array[i].studentGrade);
+    }
+    return Math.round(sum / student_array.length);
 }
 
 /**
@@ -68,7 +80,6 @@ function calculateAverage() {
 function updateData() {
     $('.avgGrade').text(calculateAverage());   //set DOM element's text equal to the value of the calculated average
     updateStudentList();
-
 }
 
 /**
@@ -76,6 +87,10 @@ function updateData() {
  */
 function updateStudentList() {
     // for each element in the global variable student_array add each
+    $('tbody').empty();
+    for(var i = 0; i < student_array.length; i++){
+        addStudentToDom(student_array[i]);
+    }
 }
 
 /**
@@ -85,6 +100,13 @@ function updateStudentList() {
  */
 function addStudentToDom(studentObj) {
     // studentObj.
+    // var $studentName = $('<>')
+    // var $course
+    $('tbody').append('<tr></tr>');
+    $('tbody tr:last').append('<td>' + studentObj.studentName + '</td>');
+    $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
+    $('tbody tr:last').append('<td>' + studentObj.studentGrade + '</td>');
+    $('tbody tr:last').append('<td><button class="btn btn-danger">Delete</button></td>');
 }
 
 /**
@@ -92,6 +114,7 @@ function addStudentToDom(studentObj) {
  */
 function reset(){
     console.log('document loaded','page reset');
+    clearAddStudentForm();
     //add click handlers for buttons
     $('button.btn-success').click(addClicked);
     $('button.btn-default').click(cancelClicked);
