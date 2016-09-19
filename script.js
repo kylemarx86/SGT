@@ -30,9 +30,7 @@ function addClicked() {
  */
 function cancelClicked() {
     console.log('cancel clicked');
-    $('#studentName').val('');
-    $('#course').val('');
-    $('#studentGrade').val('');
+    clearAddStudentForm();
 }
 
 /**
@@ -115,13 +113,30 @@ function addStudentToDom(studentObj) {
 function reset(){
     console.log('document loaded','page reset');
     clearAddStudentForm();
-    //add click handlers for buttons
-    $('button.btn-success').click(addClicked);
-    $('button.btn-default').click(cancelClicked);
-
-
 
     //need to add initialized average and data in student table
+    $('.avgGrade').text(0);     //put an average of zero in grade average
+
+    $('tbody').empty();
+
+    // var $initialResponse = $('<h2>').text('User Info Unavailable');
+    // $('tbody').append($initialResponse);
+
+    // $('tbody').append('<tr>');
+
+    var $initialRow = $('<tr>');
+    var $initialDivision = $('<td>').attr('colspan',4);
+    var $textElement = $('<h1>').text('User Info Unavailable');
+
+    $initialDivision.append($textElement);
+    $initialRow.append($initialDivision);
+    $('tbody').append($initialRow);
+
+    // $initialResponse.append('<h1>').text('User Info Unavailable');
+    // $initialResponse.append('<h1>').text('User Info Unavailable');
+    // $('tbody').append($initialResponse);
+    // $('tbody').append('<h1>User Info Unavailable</h1>').attr('colspan',4);
+    // $('tbody').attr('colspan',4).text('User Info Unavailable');         //put the phrase 'User Info Unavailable' in the table
 }
 
 
