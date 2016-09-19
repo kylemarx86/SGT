@@ -119,24 +119,14 @@ function reset(){
 
     $('tbody').empty();
 
-    // var $initialResponse = $('<h2>').text('User Info Unavailable');
-    // $('tbody').append($initialResponse);
-
-    // $('tbody').append('<tr>');
-
+    //add an initial response to the grade table prior to student information being entered
     var $initialRow = $('<tr>');
     var $initialDivision = $('<td>').attr('colspan',4);
-    var $textElement = $('<h1>').text('User Info Unavailable');
+    var $textElement = $('<h2>').text('User Info Unavailable');
 
     $initialDivision.append($textElement);
     $initialRow.append($initialDivision);
     $('tbody').append($initialRow);
-
-    // $initialResponse.append('<h1>').text('User Info Unavailable');
-    // $initialResponse.append('<h1>').text('User Info Unavailable');
-    // $('tbody').append($initialResponse);
-    // $('tbody').append('<h1>User Info Unavailable</h1>').attr('colspan',4);
-    // $('tbody').attr('colspan',4).text('User Info Unavailable');         //put the phrase 'User Info Unavailable' in the table
 }
 
 
