@@ -17,19 +17,15 @@ var inputIds = [];
  * addClicked - Event Handler when user clicks the add button
  */
 function addClicked() {
-    console.log('add clicked');
     //when clicked the add clicked should create a student object
     addStudent();
     updateData();
-
-    //then add the student object to the
 }
 
 /**
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
  */
 function cancelClicked() {
-    console.log('cancel clicked');
     clearAddStudentForm();
 }
 
@@ -40,12 +36,19 @@ function cancelClicked() {
  */
 function addStudent() {
     var studentInfo = {
-        // studentId:
         studentName: $('#studentName').val(),
         course: $('#course').val(),
-        studentGrade: $('#studentGrade').val()
+        studentGrade: $('#studentGrade').val(),
     };
+    // //I will create a student ID for this version of the SGT
+    // if(student_array === []){       //if the student array is empty, assign the student ID to 0
+    //     studentInfo.studentID = 0;
+    // }else{                          //otherwise set the student ID equal to one more than the last student ID in the student_array
+    //     studentInfo.studentID = student_array[student_array.length - 1].studentID + 1;
+    // }
+
     student_array.push(studentInfo);
+    inputIds.push(studentInfo.length);
 
     clearAddStudentForm();
 }
@@ -87,7 +90,21 @@ function updateStudentList() {
     // for each element in the global variable student_array add each
     $('tbody').empty();
     for(var i = 0; i < student_array.length; i++){
-        addStudentToDom(student_array[i]);
+        (function () {              //creating the closure allows me to pass the variable i to the inner function
+            var studentId = i;
+            addStudentToDom(student_array[studentId]);
+
+            var $deleteButton = $('button.btn-danger');
+            $deleteButton.click(function () {
+                removeStudent(studentId);
+            });
+
+
+            // var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
+            // $('tbody tr:last').append($deleteButton);
+
+            // $deleteButton.click(removeStudent(studentId));           //want to add this back in
+        })()
     }
 }
 
@@ -97,21 +114,24 @@ function updateStudentList() {
  * @param studentObj
  */
 function addStudentToDom(studentObj) {
-    // studentObj.
-    // var $studentName = $('<>')
-    // var $course
     $('tbody').append('<tr></tr>');
     $('tbody tr:last').append('<td>' + studentObj.studentName + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.studentGrade + '</td>');
-
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
-    $deleteButton.click(function () {
-
-    })
     $('tbody tr:last').append($deleteButton);
 
-    // $('tbody tr:last').append('<td><button class="btn btn-danger">Delete</button></td>');
+    // $deleteButton.click(removeStudent(studentId));
+    // $deleteButton.click(removeStudent(studentObj.index()));
+
+
+    //*****************old don't try to use
+    // (function () {
+    //     var studentId = i;
+    //     $deleteButton.click(removeStudent(studentId));
+    // })()
+
+    // $('tbody tr:last').append('<td><button class="btn btn-danger">Delete</button></td>');    //old method
 
 }
 
@@ -120,7 +140,8 @@ function addStudentToDom(studentObj) {
  * @param {number} studentId
  */
 function removeStudent(studentId) {
-
+    student_array.splice(studentId, 1);
+    updateData();
 }
 
 /**
