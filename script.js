@@ -91,9 +91,12 @@ function updateStudentList() {
             var studentId = i;
             addStudentToDom(student_array[studentId]);
 
+            // var $deleteButton = $('button.btn-danger:eq(studentId)');
             var $deleteButton = $('button.btn-danger');
             $deleteButton.click(function () {
                 removeStudent(studentId);
+
+                // removeStudent(studentId);
             });
         })()
     }
@@ -118,6 +121,7 @@ function addStudentToDom(studentObj) {
  * @param {number} studentId
  */
 function removeStudent(studentId) {
+    console.log('remove student called', studentId);
     student_array.splice(studentId, 1);
     updateData();
 }
