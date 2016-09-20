@@ -87,18 +87,7 @@ function updateStudentList() {
     // for each element in the global variable student_array add each
     $('tbody').empty();
     for(var i = 0; i < student_array.length; i++){
-        (function () {              //creating the closure allows me to pass the variable i (saved as studentId) to the inner function
-            var studentId = i;
-            addStudentToDom(student_array[studentId]);
-
-            // var $deleteButton = $('button.btn-danger:eq(studentId)');
-            var $deleteButton = $('button.btn-danger');
-            $deleteButton.click(function () {
-                removeStudent(studentId);
-
-                // removeStudent(studentId);
-            });
-        })()
+        addStudentToDom(student_array[i]);
     }
 }
 
@@ -114,6 +103,12 @@ function addStudentToDom(studentObj) {
     $('tbody tr:last').append('<td>' + studentObj.studentGrade + '</td>');
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
     $('tbody tr:last').append($deleteButton);
+
+    $deleteButton.click(function () {
+        console.log('index of parent of this',$(this).parent().index());
+        var indexOfRow = $(this).parent().index();
+        removeStudent(indexOfRow);
+    });
 }
 
 /**
