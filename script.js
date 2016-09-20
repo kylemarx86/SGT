@@ -40,12 +40,6 @@ function addStudent() {
         course: $('#course').val(),
         studentGrade: $('#studentGrade').val(),
     };
-    // //I will create a student ID for this version of the SGT
-    // if(student_array === []){       //if the student array is empty, assign the student ID to 0
-    //     studentInfo.studentID = 0;
-    // }else{                          //otherwise set the student ID equal to one more than the last student ID in the student_array
-    //     studentInfo.studentID = student_array[student_array.length - 1].studentID + 1;
-    // }
 
     student_array.push(studentInfo);
     inputIds.push(studentInfo.length);
@@ -67,12 +61,15 @@ function clearAddStudentForm() {
  * @returns {number}
  */
 function calculateAverage() {
-    var sum = 0;
-
-    for(var i = 0; i < student_array.length; i++){
-        sum += parseInt(student_array[i].studentGrade);
+    if(student_array.length === 0){
+        return 0;
+    }else{
+        var sum = 0;
+        for(var i = 0; i < student_array.length; i++){
+            sum += parseInt(student_array[i].studentGrade);
+        }
+        return Math.round(sum / student_array.length);
     }
-    return Math.round(sum / student_array.length);
 }
 
 /**
@@ -90,7 +87,7 @@ function updateStudentList() {
     // for each element in the global variable student_array add each
     $('tbody').empty();
     for(var i = 0; i < student_array.length; i++){
-        (function () {              //creating the closure allows me to pass the variable i to the inner function
+        (function () {              //creating the closure allows me to pass the variable i (saved as studentId) to the inner function
             var studentId = i;
             addStudentToDom(student_array[studentId]);
 
@@ -98,12 +95,6 @@ function updateStudentList() {
             $deleteButton.click(function () {
                 removeStudent(studentId);
             });
-
-
-            // var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
-            // $('tbody tr:last').append($deleteButton);
-
-            // $deleteButton.click(removeStudent(studentId));           //want to add this back in
         })()
     }
 }
@@ -120,23 +111,10 @@ function addStudentToDom(studentObj) {
     $('tbody tr:last').append('<td>' + studentObj.studentGrade + '</td>');
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
     $('tbody tr:last').append($deleteButton);
-
-    // $deleteButton.click(removeStudent(studentId));
-    // $deleteButton.click(removeStudent(studentObj.index()));
-
-
-    //*****************old don't try to use
-    // (function () {
-    //     var studentId = i;
-    //     $deleteButton.click(removeStudent(studentId));
-    // })()
-
-    // $('tbody tr:last').append('<td><button class="btn btn-danger">Delete</button></td>');    //old method
-
 }
 
 /**
- * removeStudent - removes a given student from the student_array
+ * removeStudent - removes a given student from the student_array, then updates the list of students on the DOM
  * @param {number} studentId
  */
 function removeStudent(studentId) {
