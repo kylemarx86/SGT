@@ -104,7 +104,23 @@ function addStudentToDom(studentObj) {
     $('tbody tr:last').append('<td>' + studentObj.studentName + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.studentGrade + '</td>');
-    $('tbody tr:last').append('<td><button class="btn btn-danger">Delete</button></td>');
+
+    var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
+    $deleteButton.click(function () {
+
+    })
+    $('tbody tr:last').append($deleteButton);
+
+    // $('tbody tr:last').append('<td><button class="btn btn-danger">Delete</button></td>');
+
+}
+
+/**
+ * removeStudent - removes a given student from the student_array
+ * @param {number} studentId
+ */
+function removeStudent(studentId) {
+
 }
 
 /**
