@@ -105,7 +105,7 @@ function addStudentToDom(studentObj) {
     $('tbody tr:last').append($deleteButton);
 
     $deleteButton.click(function () {
-        console.log('index of parent of this',$(this).parent().index());
+        // console.log('index of parent of this',$(this).parent().index());
         var indexOfRow = $(this).parent().index();
         removeStudent(indexOfRow);
     });
@@ -116,7 +116,6 @@ function addStudentToDom(studentObj) {
  * @param {number} studentId
  */
 function removeStudent(studentId) {
-    console.log('remove student called', studentId);
     student_array.splice(studentId, 1);
     updateData();
 }
@@ -125,15 +124,13 @@ function removeStudent(studentId) {
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
  */
 function reset(){
-    console.log('document loaded','page reset');
     clearAddStudentForm();
 
     //need to add initialized average and data in student table
     $('.avgGrade').text(0);     //put an average of zero in grade average
 
-    $('tbody').empty();
-
     //add an initial response to the grade table prior to student information being entered
+    $('tbody').empty();     //empty out the table body
     var $initialRow = $('<tr>');
     var $initialDivision = $('<td>').attr('colspan',4);
     var $textElement = $('<h2>').text('User Info Unavailable');
