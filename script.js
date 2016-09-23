@@ -20,6 +20,7 @@ function addClicked() {
     //when clicked the add clicked should create a student object
     addStudent();
     updateData();
+    $('#studentName').focus();
 }
 
 /**
@@ -28,6 +29,41 @@ function addClicked() {
 function cancelClicked() {
     clearAddStudentForm();
 }
+
+/**
+ *  retrieveData - Event Handler when user clicks the Retrieve Data From Server button, this will clear out the student table and repopulate it with data from the server
+ */
+function retrieveData() {
+    reset();
+    student_array = [];
+
+    $.ajax({
+        dataType: 'json',
+        url: 'http://s-apis.learningfuze.com/sgt/get',
+        method: 'post',
+        data: {
+            api_key: 'z9KW32X6Ky'
+        },
+        success: function (response) {
+            console.log('great success');
+            // successResult = response;
+            for(var i = 0; i < response.data.length; i++){
+                var student_info = {
+                    studentName: response.data[i].name,
+                    course: response.data[i].course,
+                    studentGrade: response.data[i].grade
+                };
+                student_array.push(student_info);
+            }
+            updateData();
+        },
+        error: function (response) {
+            console.log('you lose');
+        }
+    });
+}
+
+
 
 /**
  * addStudent - creates a student object based on input fields in the form and adds the object to global student array
@@ -61,15 +97,11 @@ function clearAddStudentForm() {
  * @returns {number}
  */
 function calculateAverage() {
-    if(student_array.length === 0){
-        return 0;
-    }else{
-        var sum = 0;
-        for(var i = 0; i < student_array.length; i++){
-            sum += parseInt(student_array[i].studentGrade);
-        }
-        return Math.round(sum / student_array.length);
+    var sum = 0;
+    for(var i = 0; i < student_array.length; i++){
+        sum += parseInt(student_array[i].studentGrade);
     }
+    return Math.round(sum / student_array.length);
 }
 
 /**
@@ -84,10 +116,14 @@ function updateData() {
  * updateStudentList - loops through global student array and appends each objects data into the student-list-container > list-body
  */
 function updateStudentList() {
-    // for each element in the global variable student_array add each
-    $('tbody').empty();
-    for(var i = 0; i < student_array.length; i++){
-        addStudentToDom(student_array[i]);
+    if(student_array.length === 0){
+        reset();
+    }else{
+        // for each element in the global variable student_array add each
+        $('tbody').empty();
+        for(var i = 0; i < student_array.length; i++){
+            addStudentToDom(student_array[i]);
+        }
     }
 }
 
