@@ -46,7 +46,6 @@ function retrieveData() {
         },
         success: function (response) {
             console.log('great success');
-            // successResult = response;
             for(var i = 0; i < response.data.length; i++){
                 var student_info = {
                     studentName: response.data[i].name,
