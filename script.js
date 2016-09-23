@@ -1,3 +1,5 @@
+var serverResponse = null;
+
 /**
  * Define all global variables here
  */
@@ -59,13 +61,14 @@ function retrieveData() {
             console.log('great success');
             for(var i = 0; i < response.data.length; i++){
                 var student_info = {
-                    studentName: response.data[i].name,
+                    name: response.data[i].name,
                     course: response.data[i].course,
-                    studentGrade: response.data[i].grade
+                    grade: response.data[i].grade
                 };
                 student_array.push(student_info);
                 inputIds[i] = response.data[i].id;
             }
+            $('#statusBar').text('student grade table successfully loaded').removeClass('alert-success alert-warning').addClass('alert-info');
             updateData();
         },
         error: function (response) {
@@ -80,19 +83,20 @@ function retrieveData() {
  * @return undefined ***********************************************QUESTION
  */
 function addStudent() {
+    //data to keep locally
     var studentInfo = {
-        studentName: $('#studentName').val(),
-        course: $('#course').val(),
-        studentGrade: $('#studentGrade').val(),
-    };
-
-    var formData = {
-        api_key: 'z9KW32X6Ky',
         name: $('#studentName').val(),
         course: $('#course').val(),
-        grade: parseInt($('#studentGrade').val())
+        grade: $('#studentGrade').val(),
     };
-//only add student on success
+    //data to send the server
+    var formData = {
+        api_key: 'z9KW32X6Ky',
+        name: studentInfo.name,
+        course: studentInfo.course,
+        grade: parseInt(studentInfo.grade)
+    };
+//only add student on success ********************************************
     $.ajax({
         dataType: 'json',
         url: 'http://s-apis.learningfuze.com/sgt/create',
@@ -100,27 +104,81 @@ function addStudent() {
         data: formData,
         success: function (response) {
             console.log('stuffs was added');
+            $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
+            student_array.push(studentInfo);
+            inputIds.push(studentInfo.length);
+            updateData();
         },
         error: function (response) {
+            $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
             console.log('there was an error dude');
         }
     });
 
-    student_array.push(studentInfo);
-    inputIds.push(studentInfo.length);
-
     clearAddStudentForm();
 
-    autorepopulateStudentFields();
+    autorepopulateStudentFields();      //for testing and ease of use
 }
 
 /**
- * clearAddStudentForm - clears out the form values based on inputIds variable
+ * removeStudent - removes a given student from the student_array, then updates the list of students on the DOM
+ * @param {number} rowIndex
  */
-function clearAddStudentForm() {
-    $('#studentName').val('');
-    $('#course').val('');
-    $('#studentGrade').val('');
+function removeStudent(rowIndex) {
+    var studentId = inputIds[rowIndex];
+
+    var formData = {
+        api_key: 'z9KW32X6Ky',
+        student_id: studentId
+    };
+
+    $.ajax({
+        dataType: 'json',
+        url: 'https://s-apis.learningfuze.com/sgt/delete',
+        method: 'post',
+        data: formData,
+        success: function (response) {
+            if(response.success){
+                $('#statusBar').text('student ' + student_array[rowIndex].studentName + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
+                //remove the student locally
+                student_array.splice(rowIndex, 1);
+                inputIds.splice(rowIndex, 1);
+                //update the DOM
+                updateData();
+            }else{
+                // serverResponse = response;
+                $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                }
+
+                $('tr:eq(rowIndex) > button').text('Delete');    //change the text of the button that was clicked back to delete
+                // $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
+
+                // $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
+
+                // $('button.btn-danger:nth-of-type(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
+                // console.log('this at this point: ', this);   //this is the form so identifying the row won't work here
+            }
+        },
+        error: function(response){
+            $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
+            $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
+            console.log('can\'t get rid of that student');
+            console.log(response)
+        }
+    });
+
+    // student_array.splice(studentId, 1);
+    // updateData();
+}
+
+/**
+ * updateData - centralized function to update the average and call student list update
+ */
+function updateData() {
+    $('.avgGrade').text(calculateAverage());   //set DOM element's text equal to the value of the calculated average
+    updateStudentList();
 }
 
 /**
@@ -130,17 +188,9 @@ function clearAddStudentForm() {
 function calculateAverage() {
     var sum = 0;
     for(var i = 0; i < student_array.length; i++){
-        sum += parseInt(student_array[i].studentGrade);
+        sum += parseInt(student_array[i].grade);
     }
     return Math.round(sum / student_array.length);
-}
-
-/**
- * updateData - centralized function to update the average and call student list update
- */
-function updateData() {
-    $('.avgGrade').text(calculateAverage());   //set DOM element's text equal to the value of the calculated average
-    updateStudentList();
 }
 
 /**
@@ -165,9 +215,9 @@ function updateStudentList() {
  */
 function addStudentToDom(studentObj) {
     $('tbody').append('<tr></tr>');
-    $('tbody tr:last').append('<td>' + studentObj.studentName + '</td>');
+    $('tbody tr:last').append('<td>' + studentObj.name + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
-    $('tbody tr:last').append('<td>' + studentObj.studentGrade + '</td>');
+    $('tbody tr:last').append('<td>' + studentObj.grade + '</td>');
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
     $('tbody tr:last').append($deleteButton);
 
@@ -175,46 +225,10 @@ function addStudentToDom(studentObj) {
         // console.log('index of parent of this',$(this).parent().index());
         var indexOfRow = $(this).parent().index();
         removeStudent(indexOfRow);
-        //the rest will happen after ajax call sent but (possibly) before the success of that call
+        //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
         //change the status of delete button
         $(this).text('Deleting');
     });
-}
-
-/**
- * removeStudent - removes a given student from the student_array, then updates the list of students on the DOM
- * @param {number} rowIndex
- */
-function removeStudent(rowIndex) {
-    var studentId = inputIds[rowIndex];
-
-    var formData = {
-        api_key: 'z9KW32X6Ky',
-        student_id: studentId
-    };
-
-    $.ajax({
-        url: 'https://s-apis.learningfuze.com/sgt/delete',
-        method: 'post',
-        data: formData,
-        success: function (response) {
-            console.log('flushed that turd');
-            $('#statusBar').text('student ' + student_array[rowIndex].studentName + ' successfully removed').removeClass('label-warning').addClass('label-success');
-            //remove the student locally
-            student_array.splice(rowIndex, 1);
-            inputIds.splice(rowIndex, 1);
-            //update the DOM
-            updateData();
-        },
-        error: function(response){
-            $('#statusBar').text('could not remove student').removeClass('label-success').addClass('label-warning');
-            console.log('can\'t get rid of that student');
-            console.log(response)
-        }
-    });
-
-    // student_array.splice(studentId, 1);
-    // updateData();
 }
 
 /**
@@ -235,6 +249,15 @@ function reset(){
     $initialDivision.append($textElement);
     $initialRow.append($initialDivision);
     $('tbody').append($initialRow);
+}
+
+/**
+ * clearAddStudentForm - clears out the form values based on inputIds variable
+ */
+function clearAddStudentForm() {
+    $('#studentName').val('');
+    $('#course').val('');
+    $('#studentGrade').val('');
 }
 
 /**
