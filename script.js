@@ -14,13 +14,23 @@ var student_array = [];
 var inputIds = [];
 
 /**
+ * Listen for the document to load and reset the data to the initial state
+ */
+$(document).ready(function() {
+    reset();
+    retrieveData();
+    autorepopulateStudentFields();
+});
+
+
+/**
  * addClicked - Event Handler when user clicks the add button
  */
 function addClicked() {
     //when clicked the add clicked should create a student object
     addStudent();
     updateData();
-    $('#studentName').focus();
+    // $('#studentName').focus();
 }
 
 /**
@@ -35,6 +45,7 @@ function cancelClicked() {
  */
 function retrieveData() {
     reset();
+    autorepopulateStudentFields();
     student_array = [];
 
     $.ajax({
@@ -53,6 +64,7 @@ function retrieveData() {
                     studentGrade: response.data[i].grade
                 };
                 student_array.push(student_info);
+                inputIds[i] = response.data[i].id;
             }
             updateData();
         },
@@ -61,8 +73,6 @@ function retrieveData() {
         }
     });
 }
-
-
 
 /**
  * addStudent - creates a student object based on input fields in the form and adds the object to global student array
@@ -76,10 +86,32 @@ function addStudent() {
         studentGrade: $('#studentGrade').val(),
     };
 
+    var formData = {
+        api_key: 'z9KW32X6Ky',
+        name: $('#studentName').val(),
+        course: $('#course').val(),
+        grade: parseInt($('#studentGrade').val())
+    };
+
+    $.ajax({
+        dataType: 'json',
+        url: 'http://s-apis.learningfuze.com/sgt/create',
+        method: 'post',
+        data: formData,
+        success: function (response) {
+            console.log('stuffs was added');
+        },
+        error: function (response) {
+            console.log('there was an error dude');
+        }
+    });
+
     student_array.push(studentInfo);
     inputIds.push(studentInfo.length);
 
     clearAddStudentForm();
+
+    autorepopulateStudentFields();
 }
 
 /**
@@ -175,10 +207,23 @@ function reset(){
     $('tbody').append($initialRow);
 }
 
-
 /**
- * Listen for the document to load and reset the data to the initial state
+ * Autopopulates the add student field with randomly generated south park characters, activities, and grades. will also place the focus on the add button.
  */
-$(document).ready(function() {
-    reset();
-});
+function autorepopulateStudentFields(){
+    var characterArray = ['Stan Marsh', 'Kyle Broflovski', 'Eric Cartman', 'Kenny McCormick', 'Butters Stotch', 'Wendy Testaburger'];
+    var activityArray = ['Chili cooking', 'Saving ImaginationLand', 'Peruvian Pan Fluting', 'Eating Cheesy Poofs', 'Killing Kenny', 'Tap Dancing Accidents'];
+
+    var randomCharacter = characterArray[Math.floor(Math.random() * characterArray.length)];
+    var randomActivity = activityArray[Math.floor(Math.random() * activityArray.length)];
+    var randomGrade = Math.floor(Math.random() * 100 + 1);
+
+    // console.log('randChar: ', randomCharacter);
+    // console.log('randAct: ', randomActivity);
+    // console.log('randGrade', randomGrade);
+
+    $('#studentName').val(randomCharacter);
+    $('#course').val(randomActivity);
+    $('#studentGrade').val(randomGrade);
+    $('button.btn-success').focus();
+}
