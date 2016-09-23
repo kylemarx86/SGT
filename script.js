@@ -92,7 +92,7 @@ function addStudent() {
         course: $('#course').val(),
         grade: parseInt($('#studentGrade').val())
     };
-
+//only add student on success
     $.ajax({
         dataType: 'json',
         url: 'http://s-apis.learningfuze.com/sgt/create',
@@ -175,16 +175,46 @@ function addStudentToDom(studentObj) {
         // console.log('index of parent of this',$(this).parent().index());
         var indexOfRow = $(this).parent().index();
         removeStudent(indexOfRow);
+        //the rest will happen after ajax call sent but (possibly) before the success of that call
+        //change the status of delete button
+        $(this).text('Deleting');
     });
 }
 
 /**
  * removeStudent - removes a given student from the student_array, then updates the list of students on the DOM
- * @param {number} studentId
+ * @param {number} rowIndex
  */
-function removeStudent(studentId) {
-    student_array.splice(studentId, 1);
-    updateData();
+function removeStudent(rowIndex) {
+    var studentId = inputIds[rowIndex];
+
+    var formData = {
+        api_key: 'z9KW32X6Ky',
+        student_id: studentId
+    };
+
+    $.ajax({
+        url: 'https://s-apis.learningfuze.com/sgt/delete',
+        method: 'post',
+        data: formData,
+        success: function (response) {
+            console.log('flushed that turd');
+            $('#statusBar').text('student ' + student_array[rowIndex].studentName + ' successfully removed').removeClass('label-warning').addClass('label-success');
+            //remove the student locally
+            student_array.splice(rowIndex, 1);
+            inputIds.splice(rowIndex, 1);
+            //update the DOM
+            updateData();
+        },
+        error: function(response){
+            $('#statusBar').text('could not remove student').removeClass('label-success').addClass('label-warning');
+            console.log('can\'t get rid of that student');
+            console.log(response)
+        }
+    });
+
+    // student_array.splice(studentId, 1);
+    // updateData();
 }
 
 /**
