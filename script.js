@@ -104,10 +104,20 @@ function addStudent() {
         data: formData,
         success: function (response) {
             console.log('stuffs was added');
-            $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
-            student_array.push(studentInfo);
-            inputIds.push(studentInfo.length);
-            updateData();
+            // console.log(response);
+            if(response.success){
+                $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
+                student_array.push(studentInfo);
+                // inputIds.push(studentInfo.length);
+                // console.log(response);
+                inputIds.push(response.new_id);
+                updateData();
+            }else{
+                $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                }
+            }
         },
         error: function (response) {
             $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
@@ -139,7 +149,8 @@ function removeStudent(rowIndex) {
         data: formData,
         success: function (response) {
             if(response.success){
-                $('#statusBar').text('student ' + student_array[rowIndex].studentName + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
+                //update status bar (remember student has been removed remotely but not locally)
+                $('#statusBar').text('Student ' + student_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
                 //remove the student locally
                 student_array.splice(rowIndex, 1);
                 inputIds.splice(rowIndex, 1);
@@ -152,7 +163,11 @@ function removeStudent(rowIndex) {
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
 
-                $('tr:eq(rowIndex) > button').text('Delete');    //change the text of the button that was clicked back to delete
+                $('tbody').find('button').eq(rowIndex).text('Delete');    //change the text of the button that was clicked back to delete
+                //old attempts to change the wording of the delete button
+                // $('tbody').find('button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
+                // $('tr').eq(rowIndex).find('button').text('Delete');    //change the text of the button that was clicked back to delete
+                // $('tr:eq(rowIndex) > button').text('Delete');    //change the text of the button that was clicked back to delete
                 // $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
 
                 // $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
