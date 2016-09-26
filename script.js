@@ -1,5 +1,3 @@
-var serverResponse = null;
-
 /**
  * Define all global variables here
  */
@@ -58,21 +56,33 @@ function retrieveData() {
             api_key: 'z9KW32X6Ky'
         },
         success: function (response) {
-            console.log('great success');
-            for(var i = 0; i < response.data.length; i++){
-                var student_info = {
-                    name: response.data[i].name,
-                    course: response.data[i].course,
-                    grade: response.data[i].grade
-                };
-                student_array.push(student_info);
-                inputIds[i] = response.data[i].id;
+            if(response.success){
+                console.log('great success');
+                for (var i = 0; i < response.data.length; i++) {
+                    var student_info = {
+                        name: response.data[i].name,
+                        course: response.data[i].course,
+                        grade: response.data[i].grade
+                    };
+                    student_array.push(student_info);
+                    inputIds[i] = response.data[i].id;
+                }
+                $('#statusBar').text('Student grade table successfully loaded').removeClass('alert-success alert-warning').addClass('alert-info');
+                updateData();
+            }else{
+                //update the status bar
+                $('#statusBar').text('Failed to load student grade table').removeClass('alert-success alert-info').addClass('alert-warning');
+                for(var i = 0; i < response.error.length; i++){
+                    $('#statusBar').append('<p>' + response.error[i] + '</p>');
+                }
             }
-            $('#statusBar').text('student grade table successfully loaded').removeClass('alert-success alert-warning').addClass('alert-info');
-            updateData();
         },
         error: function (response) {
-            console.log('you lose');
+            //update the status bar
+            $('#statusBar').text('Failed to load student grade table').removeClass('alert-success alert-info').addClass('alert-warning');
+            for(var i = 0; i < response.error.length; i++){
+                $('#statusBar').append('<p>' + response.error[i] + '</p>');
+            }
         }
     });
 }
