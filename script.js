@@ -57,7 +57,6 @@ function retrieveData() {
         },
         success: function (response) {
             if(response.success){
-                console.log('great success');
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
                         name: response.data[i].name,
@@ -112,7 +111,6 @@ function addStudent() {
         method: 'post',
         data: formData,
         success: function (response) {
-            // console.log(response);
             if(response.success){
                 //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
@@ -247,7 +245,6 @@ function addStudentToDom(studentObj) {
     $('tbody tr:last').append($deleteButton);
 
     $deleteButton.click(function () {
-        // console.log('index of parent of this',$(this).parent().index());
         var indexOfRow = $(this).parent().index();
         removeStudent(indexOfRow);
         //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
