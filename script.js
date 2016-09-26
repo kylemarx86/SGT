@@ -96,37 +96,40 @@ function addStudent() {
         course: studentInfo.course,
         grade: parseInt(studentInfo.grade)
     };
-//only add student on success ********************************************
     $.ajax({
         dataType: 'json',
         url: 'http://s-apis.learningfuze.com/sgt/create',
         method: 'post',
         data: formData,
         success: function (response) {
-            console.log('stuffs was added');
             // console.log(response);
             if(response.success){
+                //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
+                //add student info to array of students
                 student_array.push(studentInfo);
-                // inputIds.push(studentInfo.length);
-                // console.log(response);
+                //add student id to array fo inputIds
                 inputIds.push(response.new_id);
+                //update the DOM with list of students
                 updateData();
             }else{
+                //update the status bar
                 $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
-                for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                for(var i = 0; i < response.error.length; i++){
+                    $('#statusBar').append('<p>' + response.error[i] + '</p>');
                 }
             }
         },
         error: function (response) {
+            //update the status bar
             $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
-            console.log('there was an error dude');
+            for(var i = 0; i < response.error.length; i++){
+                $('#statusBar').append('<p>' + response.error[i] + '</p>');
+            }
         }
     });
 
-    clearAddStudentForm();
-
+    clearAddStudentForm();              //empty out the add student form
     autorepopulateStudentFields();      //for testing and ease of use
 }
 
@@ -157,35 +160,32 @@ function removeStudent(rowIndex) {
                 //update the DOM
                 updateData();
             }else{
-                // serverResponse = response;
                 $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
-                for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                for(var i = 0; i < response.error.length; i++){
+                    $('#statusBar').append('<p>' + response.error[i] + '</p>');
                 }
+                //change the text of the button that was clicked back to delete
+                $('tbody').find('button').eq(rowIndex).text('Delete');
 
-                $('tbody').find('button').eq(rowIndex).text('Delete');    //change the text of the button that was clicked back to delete
                 //old attempts to change the wording of the delete button
-                // $('tbody').find('button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
-                // $('tr').eq(rowIndex).find('button').text('Delete');    //change the text of the button that was clicked back to delete
-                // $('tr:eq(rowIndex) > button').text('Delete');    //change the text of the button that was clicked back to delete
-                // $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
-
-                // $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
-
-                // $('button.btn-danger:nth-of-type(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
-                // console.log('this at this point: ', this);   //this is the form so identifying the row won't work here
+                // $('tbody').find('button:eq(rowIndex)').text('Delete');    //
+                // $('tr').eq(rowIndex).find('button').text('Delete');    //
+                // $('tr:eq(rowIndex) > button').text('Delete');            //
+                // $('tbody > button:eq(rowIndex)').text('Delete');    //button is not the direct descendant of of the tbody, it is of the tr
+                // $('tbody > button:eq(rowIndex)').text('Delete');         //button is not the direct descendant of of the tbody, it is of the tr
+                // $('button.btn-danger:nth-of-type(rowIndex)').text('Delete');    //
             }
         },
         error: function(response){
+            //update status bar
             $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
-            $('tbody > button:eq(rowIndex)').text('Delete');    //change the text of the button that was clicked back to delete
-            console.log('can\'t get rid of that student');
-            console.log(response)
+            for(var i = 0; i < response.error.length; i++){
+                $('#statusBar').append('<p>' + response.error[i] + '</p>');
+            }
+            //change the text of the button that was clicked back to delete
+            $('tbody').find('button').eq(rowIndex).text('Delete');
         }
     });
-
-    // student_array.splice(studentId, 1);
-    // updateData();
 }
 
 /**
@@ -285,10 +285,6 @@ function autorepopulateStudentFields(){
     var randomCharacter = characterArray[Math.floor(Math.random() * characterArray.length)];
     var randomActivity = activityArray[Math.floor(Math.random() * activityArray.length)];
     var randomGrade = Math.floor(Math.random() * 100 + 1);
-
-    // console.log('randChar: ', randomCharacter);
-    // console.log('randAct: ', randomActivity);
-    // console.log('randGrade', randomGrade);
 
     $('#studentName').val(randomCharacter);
     $('#course').val(randomActivity);
