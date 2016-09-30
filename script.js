@@ -123,8 +123,8 @@ function addStudent() {
             }else{
                 //update the status bar
                 $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
-                for(var i = 0; i < response.error.length; i++){
-                    $('#statusBar').append('<p>' + response.error[i] + '</p>');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
             }
         },
@@ -169,8 +169,8 @@ function removeStudent(rowIndex) {
                 updateData();
             }else{
                 $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
-                for(var i = 0; i < response.error.length; i++){
-                    $('#statusBar').append('<p>' + response.error[i] + '</p>');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
                 //change the text of the button that was clicked back to delete
                 $('tbody').find('button').eq(rowIndex).text('Delete');
