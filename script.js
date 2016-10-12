@@ -50,12 +50,14 @@ function retrieveData() {
 
     $.ajax({
         dataType: 'json',
-        url: 'http://s-apis.learningfuze.com/sgt/get',
+        // dataType: 'text',
+        url: 'read.php',
         method: 'post',
         data: {
-            api_key: 'z9KW32X6Ky'
+            // api_key: 'z9KW32X6Ky'
         },
         success: function (response) {
+            console.log(response);
             if(response.success){
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
@@ -77,6 +79,7 @@ function retrieveData() {
             }
         },
         error: function (response) {
+            console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to load student grade table').removeClass('alert-success alert-info').addClass('alert-warning');
             for(var i = 0; i < response.error.length; i++){
