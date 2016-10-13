@@ -290,7 +290,7 @@ function clearAddStudentForm() {
  */
 function autorepopulateStudentFields(){
     var characterArray = ['Stan Marsh', 'Kyle Broflovski', 'Eric Cartman', 'Kenny McCormick', 'Butters Stotch', 'Wendy Testaburger'];
-    var activityArray = ['Chili cooking', 'Saving ImaginationLand', 'Peruvian Pan Fluting', 'Eating Cheesy Poofs', 'Killing Kenny', 'Tap Dancing Accidents'];
+    var activityArray = ['Chili cooking', 'Saving Imaginationland', 'Peruvian Pan Fluting', 'Eating Cheesy Poofs', 'Killing Kenny', 'Tap Dancing Accidents'];
 
     var randomCharacter = characterArray[Math.floor(Math.random() * characterArray.length)];
     var randomActivity = activityArray[Math.floor(Math.random() * activityArray.length)];
