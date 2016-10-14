@@ -50,7 +50,6 @@ function retrieveData() {
 
     $.ajax({
         dataType: 'json',
-        // dataType: 'text',
         url: 'read.php',
         method: 'post',
         data: {
