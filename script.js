@@ -61,7 +61,7 @@ function retrieveData() {
             if(response.success){
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
-                        name: response.data[i].name,
+                        name: response.data[i].student,
                         course: response.data[i].course,
                         grade: response.data[i].grade
                     };
