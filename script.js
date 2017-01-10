@@ -102,14 +102,15 @@ function addStudent() {
     };
     //data to send the server
     var formData = {
-        api_key: 'z9KW32X6Ky',
+        // api_key: 'z9KW32X6Ky',
         name: studentInfo.name,
         course: studentInfo.course,
         grade: parseInt(studentInfo.grade)
     };
     $.ajax({
         dataType: 'json',
-        url: 'http://s-apis.learningfuze.com/sgt/create',
+        // url: 'http://s-apis.learningfuze.com/sgt/create',   //old
+        url: 'add.php',   //new
         method: 'post',
         data: formData,
         success: function (response) {
@@ -157,7 +158,8 @@ function removeStudent(rowIndex) {
 
     $.ajax({
         dataType: 'json',
-        url: 'https://s-apis.learningfuze.com/sgt/delete',
+        // url: 'https://s-apis.learningfuze.com/sgt/delete',  //old
+        url: 'delete.php',
         method: 'post',
         data: formData,
         success: function (response) {
