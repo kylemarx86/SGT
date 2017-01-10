@@ -102,7 +102,7 @@ function addStudent() {
     };
     //data to send the server
     var formData = {
-        // api_key: 'z9KW32X6Ky',
+        // api_key: 'z9KW32X6Ky',   //old
         name: studentInfo.name,
         course: studentInfo.course,
         grade: parseInt(studentInfo.grade)
@@ -110,7 +110,7 @@ function addStudent() {
     $.ajax({
         dataType: 'json',
         // url: 'http://s-apis.learningfuze.com/sgt/create',   //old
-        url: 'add.php',   //new
+        url: 'add_student.php',   //new
         method: 'post',
         data: formData,
         success: function (response) {
