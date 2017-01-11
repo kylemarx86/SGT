@@ -110,7 +110,7 @@ function addGrade() {
     $.ajax({
         dataType: 'json',
         // url: 'http://s-apis.learningfuze.com/sgt/create',   //old
-        url: 'add_student.php',   //new
+        url: 'add_grade.php',   //new
         method: 'post',
         data: formData,
         success: function (response) {
@@ -120,6 +120,7 @@ function addGrade() {
                 //add student info to array of students
                 student_array.push(studentInfo);
                 //add student id to array of inputIds
+                    //need to amend this
                 inputIds.push(response.new_id);
                 //update the DOM with list of students
                 updateData();
@@ -129,6 +130,7 @@ function addGrade() {
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
+                console.log(response.errors);
             }
         },
         error: function (response) {
@@ -137,6 +139,7 @@ function addGrade() {
             for(var i = 0; i < response.error.length; i++){
                 $('#statusBar').append('<p>' + response.error[i] + '</p>');
             }
+            console.log(response);
         }
     });
 
