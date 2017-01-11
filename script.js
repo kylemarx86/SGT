@@ -159,7 +159,7 @@ function removeGrade(rowIndex) {
     $.ajax({
         dataType: 'json',
         // url: 'https://s-apis.learningfuze.com/sgt/delete',  //old
-        url: 'delete.php',
+        url: 'delete_grade.php',
         method: 'post',
         data: formData,
         success: function (response) {
