@@ -26,7 +26,7 @@ $(document).ready(function() {
 /**
  * addClicked - Event Handler when user clicks the add button
  */
-function addClicked() {
+function addGradeClicked() {
     //when clicked the add clicked should create a student object
     addStudent();
     updateData();
