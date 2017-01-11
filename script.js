@@ -28,7 +28,7 @@ $(document).ready(function() {
  */
 function addGradeClicked() {
     //when clicked the add clicked should create a student object
-    addStudent();
+    addGrade();
     updateData();
     // $('#studentName').focus();
 }
@@ -93,7 +93,7 @@ function retrieveData() {
  * @global {array}
  * @return undefined ***********************************************QUESTION
  */
-function addStudent() {
+function addGrade() {
     //data to keep locally
     var studentInfo = {
         name: $('#studentName').val(),
@@ -119,7 +119,7 @@ function addStudent() {
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
                 student_array.push(studentInfo);
-                //add student id to array fo inputIds
+                //add student id to array of inputIds
                 inputIds.push(response.new_id);
                 //update the DOM with list of students
                 updateData();
@@ -145,14 +145,14 @@ function addStudent() {
 }
 
 /**
- * removeStudent - removes a given student from the student_array, then updates the list of students on the DOM
+ * removeGrade - removes a given student from the student_array, then updates the list of students on the DOM
  * @param {number} rowIndex
  */
-function removeStudent(rowIndex) {
+function removeGrade(rowIndex) {
     var studentId = inputIds[rowIndex];
 
     var formData = {
-        api_key: 'z9KW32X6Ky',
+        // api_key: 'z9KW32X6Ky',   //old
         student_id: studentId
     };
 
@@ -250,7 +250,7 @@ function addStudentToDom(studentObj) {
 
     $deleteButton.click(function () {
         var indexOfRow = $(this).parent().index();
-        removeStudent(indexOfRow);
+        removeGrade(indexOfRow);
         //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
         //change the status of delete button
         $(this).text('Deleting');
