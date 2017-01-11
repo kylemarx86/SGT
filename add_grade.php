@@ -16,10 +16,10 @@ $grade = $_POST['grade'];
 
 $data = [];
 $data['success'] = false;
-$data['errors'][] = [];
+$data['errors'] = [];
 
 //get the id of the course
-$course_query = "SELECT ID FROM `courses` WHERE name=".$course;
+$course_query = "SELECT ID FROM `courses` WHERE name='".$course."'";
 $course_result = mysqli_query($conn, $course_query);
 
 if(mysqli_num_rows($course_result)){
@@ -27,21 +27,19 @@ if(mysqli_num_rows($course_result)){
     while($row = mysqli_fetch_assoc($course_result)){
         $course_id = $row['ID'];
     }
-
-//        print('we already have a class named '.$course);
-//    $new_query = ""
 }else{
     //insert the course into the db and retrieve the id
     //    echo 'we need to add this class '.$course;    //temp while testing
-    $add_course_query = "INSERT INTO `courses` SET name = ".$course;
+    $add_course_query = "INSERT INTO `courses` SET name = '".$course."'";
     $add_course_result = mysqli_query($conn, $add_course_query);
 
 //    print("<br>".mysqli_insert_id($conn));    //temp while testing
     $course_id = mysqli_insert_id($conn);
+    $data['course_id'] = $course_id ;   //temp while testing?????
 }
 
 //get the id of the student
-$student_query = "SELECT ID FROM `students` WHERE name = ".$student;
+$student_query = "SELECT ID FROM `students` WHERE name = '".$student."'";
 $student_result = mysqli_query($conn, $student_query);
 
 if(mysqli_num_rows($course_result)){
@@ -51,10 +49,11 @@ if(mysqli_num_rows($course_result)){
     }
 }else{
     //insert the student into the db and retrieve the id
-    $add_student_query = "INSERT INTO `students` SET name = ".$student;
+    $add_student_query = "INSERT INTO `students` SET name = '".$student."'";
     $add_student_result = mysqli_query($conn, $add_student_query);
 
     $student_id = mysqli_insert_id($conn);
+    $data['student_id'] = $student_id;
 }
 
 //the query writes but the student_id and course_id always seem to be 0
