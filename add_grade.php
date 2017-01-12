@@ -42,18 +42,19 @@ if(mysqli_num_rows($course_result)){
 $student_query = "SELECT ID FROM `students` WHERE name = '$student'";
 $student_result = mysqli_query($conn, $student_query);
 
-if(mysqli_num_rows($course_result)){
+if(mysqli_num_rows($student_result)){
     //we have student in the db already, we need to grab the id
-    while($row = mysqli_fetch_assoc($course_result)){
+    while($row = mysqli_fetch_assoc($student_result)){
         $student_id = $row['ID'];
     }
+    echo $student_id;
 }else{
     //insert the student into the db and retrieve the id
     $add_student_query = "INSERT INTO `students` SET name = '$student'";
     $add_student_result = mysqli_query($conn, $add_student_query);
 
     $student_id = mysqli_insert_id($conn);
-    $data['student_id'] = $student_id;
+//    $data['student_id'] = $student_id;
 }
 
 //the query writes but the student_id and course_id always seem to be 0
