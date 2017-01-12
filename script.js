@@ -26,9 +26,9 @@ $(document).ready(function() {
 /**
  * addClicked - Event Handler when user clicks the add button
  */
-function addClicked() {
+function addGradeClicked() {
     //when clicked the add clicked should create a student object
-    addStudent();
+    addGrade();
     updateData();
     // $('#studentName').focus();
 }
@@ -93,7 +93,7 @@ function retrieveData() {
  * @global {array}
  * @return undefined ***********************************************QUESTION
  */
-function addStudent() {
+function addGrade() {
     //data to keep locally
     var studentInfo = {
         name: $('#studentName').val(),
@@ -102,14 +102,15 @@ function addStudent() {
     };
     //data to send the server
     var formData = {
-        api_key: 'z9KW32X6Ky',
+        // api_key: 'z9KW32X6Ky',   //old
         name: studentInfo.name,
         course: studentInfo.course,
         grade: parseInt(studentInfo.grade)
     };
     $.ajax({
         dataType: 'json',
-        url: 'http://s-apis.learningfuze.com/sgt/create',
+        // url: 'http://s-apis.learningfuze.com/sgt/create',   //old
+        url: 'add_grade.php',   //new
         method: 'post',
         data: formData,
         success: function (response) {
@@ -118,7 +119,8 @@ function addStudent() {
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
                 student_array.push(studentInfo);
-                //add student id to array fo inputIds
+                //add student id to array of inputIds
+                    //need to amend this
                 inputIds.push(response.new_id);
                 //update the DOM with list of students
                 updateData();
@@ -128,6 +130,7 @@ function addStudent() {
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
+                console.log(response.errors);
             }
         },
         error: function (response) {
@@ -136,6 +139,7 @@ function addStudent() {
             for(var i = 0; i < response.error.length; i++){
                 $('#statusBar').append('<p>' + response.error[i] + '</p>');
             }
+            console.log(response);
         }
     });
 
@@ -144,20 +148,21 @@ function addStudent() {
 }
 
 /**
- * removeStudent - removes a given student from the student_array, then updates the list of students on the DOM
+ * removeGrade - removes a given student from the student_array, then updates the list of students on the DOM
  * @param {number} rowIndex
  */
-function removeStudent(rowIndex) {
+function removeGrade(rowIndex) {
     var studentId = inputIds[rowIndex];
 
     var formData = {
-        api_key: 'z9KW32X6Ky',
+        // api_key: 'z9KW32X6Ky',   //old
         student_id: studentId
     };
 
     $.ajax({
         dataType: 'json',
-        url: 'https://s-apis.learningfuze.com/sgt/delete',
+        // url: 'https://s-apis.learningfuze.com/sgt/delete',  //old
+        url: 'delete_grade.php',
         method: 'post',
         data: formData,
         success: function (response) {
@@ -248,7 +253,7 @@ function addStudentToDom(studentObj) {
 
     $deleteButton.click(function () {
         var indexOfRow = $(this).parent().index();
-        removeStudent(indexOfRow);
+        removeGrade(indexOfRow);
         //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
         //change the status of delete button
         $(this).text('Deleting');

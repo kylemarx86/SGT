@@ -3,9 +3,13 @@ date_default_timezone_set('America/Los_Angeles');
 
 require_once('mysql_connect.php');
 
-$course = "'wrastling 402'";
-$student = "'Token Black'";
-$grade = '60';
+//$course = "'wrastling 402'";
+//$student = "'Stan Marsh'";
+//$grade = '60';
+$course = $_POST['course'];
+$student = $_POST['student'];
+$grade = $_POST['grade'];
+
 
 $course_query = "SELECT ID FROM `courses` WHERE name=".$course;
 $course_result = mysqli_query($conn, $course_query);
@@ -42,5 +46,3 @@ if(0 < $grade && $grade <= 100){
 
 //mr conners wrestling
 ?>
-
-
