@@ -2,12 +2,12 @@
 date_default_timezone_set('America/Los_Angeles');
 require_once('mysql_connect.php');
 
-$course = "wrastling 402";
-$student = "Stan Marsh";
-$grade = 60;
-//$student = $_POST['name'];
-//$course = $_POST['course'];
-//$grade = $_POST['grade'];
+//$course = "wrastling 402";
+//$student = "Stan Marsh";
+//$grade = 60;
+$student = $_POST['name'];
+$course = $_POST['course'];
+$grade = $_POST['grade'];
 
 //theory check to see if there is a grade already for a student in a specific class
     //if so return an error
@@ -47,7 +47,7 @@ if(mysqli_num_rows($student_result)){
     while($row = mysqli_fetch_assoc($student_result)){
         $student_id = $row['ID'];
     }
-    echo $student_id;
+//    echo $student_id;
 }else{
     //insert the student into the db and retrieve the id
     $add_student_query = "INSERT INTO `students` SET name = '$student'";
@@ -64,7 +64,7 @@ if(0 < $grade && $grade <= 100){
     $add_grade_query = "INSERT INTO `grades` SET student_id = '$student_id', course_id = '$course_id', grade = $grade, created = NOW()";
     $add_grade_result = mysqli_query($conn, $add_grade_query);
 
-    if(mysqli_num_rows($add_grade_result)){
+    if(mysqli_affected_rows($conn)){
         $data['success'] = true;
         $data['new_id'] = mysqli_insert_id($conn);
     }
