@@ -126,11 +126,11 @@ function addGrade() {
                 updateData();
             }else{
                 //update the status bar
-                $('#statusBar').text('Failed to add ' + studentInfo.name).removeClass('alert-success alert-info').addClass('alert-warning');
+                $('#statusBar').text('Failed to add grade for student' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
-                console.log(response.errors);
+                // console.log(response.errors);
             }
         },
         error: function (response) {
@@ -139,7 +139,7 @@ function addGrade() {
             for(var i = 0; i < response.error.length; i++){
                 $('#statusBar').append('<p>' + response.error[i] + '</p>');
             }
-            console.log(response);
+            // console.log(response);
         }
     });
 
