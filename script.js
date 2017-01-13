@@ -37,7 +37,7 @@ function addGradeClicked() {
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
  */
 function cancelClicked() {
-    clearAddStudentForm();
+    clearAddGradeForm();
 }
 
 /**
@@ -143,7 +143,7 @@ function addGrade() {
         }
     });
 
-    clearAddStudentForm();              //empty out the add student form
+    clearAddGradeForm();              //empty out the add student form
     autorepopulateStudentFields();      //for testing and ease of use
 }
 
@@ -268,7 +268,7 @@ function addStudentToDom(studentObj) {
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
  */
 function reset(){
-    clearAddStudentForm();
+    clearAddGradeForm();
 
     //need to add initialized average and data in student table
     $('.avgGrade').text(0);     //put an average of zero in grade average
@@ -285,9 +285,9 @@ function reset(){
 }
 
 /**
- * clearAddStudentForm - clears out the form values based on inputIds variable
+ * clearAddGradeForm - clears out the form values based on inputIds variable
  */
-function clearAddStudentForm() {
+function clearAddGradeForm() {
     $('#studentName').val('');
     $('#course').val('');
     $('#studentGrade').val('');
