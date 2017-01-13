@@ -65,13 +65,13 @@ function retrieveData() {
                         grade: response.data[i].grade
                     };
                     student_array.push(student_info);
-                    inputIds[i] = response.data[i].id;
+                    inputIds[i] = response.data[i].ID;
                 }
-                $('#statusBar').text('Student grade table successfully loaded').removeClass('alert-success alert-warning').addClass('alert-info');
+                $('#statusBar').text('Student grade table successfully loaded.').removeClass('alert-success alert-warning').addClass('alert-info');
                 updateData();
             }else{
                 //update the status bar
-                $('#statusBar').text('Failed to load student grade table').removeClass('alert-success alert-info').addClass('alert-warning');
+                $('#statusBar').text('Failed to load student grade table. ').removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.error.length; i++){
                     $('#statusBar').append('<p>' + response.error[i] + '</p>');
                 }
@@ -167,6 +167,7 @@ function removeGrade(rowIndex) {
         data: formData,
         success: function (response) {
             if(response.success){
+                console.log(response);
                 //update status bar (remember student has been removed remotely but not locally)
                 $('#statusBar').text('Student ' + student_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
                 //remove the student locally
@@ -175,6 +176,7 @@ function removeGrade(rowIndex) {
                 //update the DOM
                 updateData();
             }else{
+                console.log(response);
                 $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
@@ -192,6 +194,7 @@ function removeGrade(rowIndex) {
             }
         },
         error: function(response){
+            console.log(response);
             //update status bar
             $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
             for(var i = 0; i < response.error.length; i++){
@@ -252,6 +255,7 @@ function addStudentToDom(studentObj) {
     $('tbody tr:last').append($deleteButton);
 
     $deleteButton.click(function () {
+        console.log('click handler added');
         var indexOfRow = $(this).parent().index();
         removeGrade(indexOfRow);
         //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
