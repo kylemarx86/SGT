@@ -2,10 +2,10 @@
  * Define all global variables here
  */
 /**
- * student_array - global array to hold student objects
+ * grade_array - global array to hold student objects
  * @type {Array}
  */
-var student_array = [];
+var grade_array = [];
 
 /**
  * inputIds - id's of the elements that are used to add students
@@ -46,7 +46,7 @@ function cancelClicked() {
 function retrieveData() {
     reset();
     autorepopulateStudentFields();
-    student_array = [];
+    grade_array = [];
 
     $.ajax({
         dataType: 'json',
@@ -64,7 +64,7 @@ function retrieveData() {
                         course: response.data[i].course,
                         grade: response.data[i].grade
                     };
-                    student_array.push(student_info);
+                    grade_array.push(student_info);
                     inputIds[i] = response.data[i].ID;
                 }
                 $('#statusBar').text('Student grade table successfully loaded.').removeClass('alert-success alert-warning').addClass('alert-info');
@@ -118,7 +118,7 @@ function addGrade() {
                 //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
-                student_array.push(studentInfo);
+                grade_array.push(studentInfo);
                 //add student id to array of inputIds
                     //need to amend this
                 inputIds.push(response.new_id);
@@ -148,7 +148,7 @@ function addGrade() {
 }
 
 /**
- * removeGrade - removes a given student from the student_array, then updates the list of students on the DOM
+ * removeGrade - removes a given student from the grade_array, then updates the list of students on the DOM
  * @param {number} rowIndex
  */
 function removeGrade(rowIndex) {
@@ -169,15 +169,15 @@ function removeGrade(rowIndex) {
             if(response.success){
                 console.log(response);
                 //update status bar (remember student has been removed remotely but not locally)
-                $('#statusBar').text('Student ' + student_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
+                $('#statusBar').text('Student ' + grade_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
                 //remove the student locally
-                student_array.splice(rowIndex, 1);
+                grade_array.splice(rowIndex, 1);
                 inputIds.splice(rowIndex, 1);
                 //update the DOM
                 updateData();
             }else{
                 console.log(response);
-                $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
+                $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
@@ -196,7 +196,7 @@ function removeGrade(rowIndex) {
         error: function(response){
             console.log(response);
             //update status bar
-            $('#statusBar').text('Could not remove student ' + student_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
+            $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
             for(var i = 0; i < response.error.length; i++){
                 $('#statusBar').append('<p>' + response.error[i] + '</p>');
             }
@@ -220,23 +220,23 @@ function updateData() {
  */
 function calculateAverage() {
     var sum = 0;
-    for(var i = 0; i < student_array.length; i++){
-        sum += parseInt(student_array[i].grade);
+    for(var i = 0; i < grade_array.length; i++){
+        sum += parseInt(grade_array[i].grade);
     }
-    return Math.round(sum / student_array.length);
+    return Math.round(sum / grade_array.length);
 }
 
 /**
  * updateStudentList - loops through global student array and appends each objects data into the student-list-container > list-body
  */
 function updateStudentList() {
-    if(student_array.length === 0){
+    if(grade_array.length === 0){
         reset();
     }else{
-        // for each element in the global variable student_array add each
+        // for each element in the global variable grade_array add each
         $('tbody').empty();
-        for(var i = 0; i < student_array.length; i++){
-            addGradeToDom(student_array[i]);
+        for(var i = 0; i < grade_array.length; i++){
+            addGradeToDom(grade_array[i]);
         }
     }
 }
@@ -253,14 +253,20 @@ function addGradeToDom(studentObj) {
     $('tbody tr:last').append('<td>' + studentObj.grade + '</td>');
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
     $('tbody tr:last').append($deleteButton);
+    var $editButton = $('<button>').addClass('btn btn-warning').text('Edit');
+    $('tbody tr:last').append($editButton);
 
     $deleteButton.click(function () {
-        console.log('click handler added');
         var indexOfRow = $(this).parent().index();
         removeGrade(indexOfRow);
         //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
         //change the status of delete button
         $(this).text('Deleting');
+    });
+    $editButton.click(function () {
+        console.log('edit button clicked');
+        //write code for edit here
+        //create modal for info to edit with submit button. submit button should check to see if
     });
 }
 
