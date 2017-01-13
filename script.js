@@ -236,17 +236,17 @@ function updateStudentList() {
         // for each element in the global variable student_array add each
         $('tbody').empty();
         for(var i = 0; i < student_array.length; i++){
-            addStudentToDom(student_array[i]);
+            addGradeToDom(student_array[i]);
         }
     }
 }
 
 /**
- * addStudentToDom - take in a student object, create html elements from the values and then append the elements
+ * addGradeToDom - take in a student object, create html elements from the values and then append the elements
  * into the .student_list tbody
  * @param studentObj
  */
-function addStudentToDom(studentObj) {
+function addGradeToDom(studentObj) {
     $('tbody').append('<tr></tr>');
     $('tbody tr:last').append('<td>' + studentObj.name + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
