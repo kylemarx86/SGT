@@ -253,7 +253,9 @@ function addGradeToDom(studentObj) {
     $('tbody tr:last').append('<td>' + studentObj.grade + '</td>');
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
     $('tbody tr:last').append($deleteButton);
-    var $editButton = $('<button>').addClass('btn btn-warning').text('Edit');
+    //old
+    // var $editButton = $('<button>').addClass('btn btn-warning').attr({type:'button','data-toggle':'modal', 'data-target':'#editModal'}).text('Edit');
+    var $editButton = $('<button>').addClass('btn btn-warning').attr({type:'button','data-toggle':'modal'}).text('Edit');
     $('tbody tr:last').append($editButton);
 
     $deleteButton.click(function () {
@@ -265,8 +267,11 @@ function addGradeToDom(studentObj) {
     });
     $editButton.click(function () {
         console.log('edit button clicked');
+        $('#editModal').modal('show');
         //write code for edit here
         //create modal for info to edit with submit button. submit button should check to see if
+
+
     });
 }
 

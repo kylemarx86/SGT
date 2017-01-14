@@ -46,6 +46,10 @@
             <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
         </div>
         <div class="form-group">
+            <!--temp while testing modal-->
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editModal">open modal
+            </button>
+            <!--end temp-->
             <button type="button" class="btn btn-warning">Add Student</button>
             <button type="button" class="btn btn-warning">Add Course</button>
         </div>
@@ -71,6 +75,23 @@
         </table>
     </div>
 </div>
+
+<!--Modal-->
+<div class="modal fade" id="editModal" role="dialog">
+    <div class="modal-dialog">
+        <!--modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    hello wallet
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="btn btn-success" data-dismiss="modal">Edit Grade</button>
+                <button type="btn btn-warning" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
