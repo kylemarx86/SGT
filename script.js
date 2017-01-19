@@ -271,9 +271,9 @@ function addGradeToDom(studentObj) {
         // var indexOfRow = $(this).parent().index();
         var indexOfRow = row.index();
 
-        console.log('this student: ', grade_array[indexOfRow].name);
-        console.log('this course: ', grade_array[indexOfRow].course);
-        console.log('this grade: ', grade_array[indexOfRow].grade);
+        // console.log('this student: ', grade_array[indexOfRow].name);
+        // console.log('this course: ', grade_array[indexOfRow].course);
+        // console.log('this grade: ', grade_array[indexOfRow].grade);
         // console.log('edit button clicked');
         var modal = $('#editModal');
         modal.modal('show');
@@ -285,8 +285,56 @@ function addGradeToDom(studentObj) {
 
         //write code for edit here
         //create modal for info to edit with submit button. submit button should check to see if
+        editGradeInfo(indexOfRow)
+
+    });
+}
+
+function editGradeInfo(rowIndex) {
+    //data to keep locally
+    var studentInfo = {
+        name: $('#modalStudentGrade').val(),
+        course: $('#modalCourse').val(),
+        grade: $('#modalStudentGrade').val(),
+    };
+    //data to send the server
+    var formData = {
+        name: studentInfo.name,
+        course: studentInfo.course,
+        grade: parseInt(studentInfo.grade)
+    };
+    $.ajax({
+        dataType: 'json',
+        url: 'edit_grade.php',   //new
+        method: 'post',
+        data: formData,
+        success: function (response) {
+            if(response.success){
+                //update status bar
+                $('#statusBar').text(studentInfo.name + ' was successfully edited').removeClass('alert-warning alert-info').addClass('alert-success');
+
+                //may not need this
+                //update student info in array of students
 
 
+                //update the DOM with list of students
+                updateData();
+            }else{
+                //update the status bar
+                $('#statusBar').text('Failed to edit student info for ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                }
+                // console.log(response.errors);
+            }
+        },
+        error: function (response) {
+            //update the status bar
+            $('#statusBar').text('Failed to edit student info for ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+            for(var i = 0; i < response.errors.length; i++){
+                $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+            }
+        }
     });
 }
 
