@@ -252,11 +252,12 @@ function addGradeToDom(studentObj) {
     $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
     $('tbody tr:last').append('<td>' + studentObj.grade + '</td>');
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
-    $('tbody tr:last').append('<td>', $deleteButton, '</td>');
-    //old
-    // var $editButton = $('<button>').addClass('btn btn-warning').attr({type:'button','data-toggle':'modal', 'data-target':'#editModal'}).text('Edit');
+    $deleteButton = $('<td>').append($deleteButton);
+    $('tbody tr:last').append($deleteButton);
+
     var $editButton = $('<button>').addClass('btn btn-warning').attr({type:'button','data-toggle':'modal'}).text('Edit');
-    $('tbody tr:last').append('<td>', $editButton, '</td>');
+    $editButton = $('<td>').append($editButton);
+    $('tbody tr:last').append($editButton);
 
     $deleteButton.click(function () {
         var indexOfRow = $(this).parent().index();
