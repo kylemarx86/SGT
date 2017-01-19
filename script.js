@@ -283,9 +283,14 @@ function addGradeToDom(studentObj) {
 
         // $('#modalCourse').attr(placeholder, )
 
+        //need another click handler for the edit/submit button on edit modal
+
         //write code for edit here
         //create modal for info to edit with submit button. submit button should check to see if
-        editGradeInfo(indexOfRow)
+        // editGradeInfo(indexOfRow)
+
+        //start here
+        //need to store the rowIndex in a variable that can somehow be passed into the editStudentInfo method without the use of parameter in the index file
 
     });
 }
@@ -293,6 +298,7 @@ function addGradeToDom(studentObj) {
 function editStudentInfo(rowIndex) {
     //data to keep locally
     var studentInfo = {
+        id: inputIds[rowIndex],
         name: $('#modalStudentGrade').val(),
         course: $('#modalCourse').val(),
         grade: $('#modalStudentGrade').val(),
@@ -305,7 +311,7 @@ function editStudentInfo(rowIndex) {
     };
     $.ajax({
         dataType: 'json',
-        url: 'edit_grade.php',   //new
+        url: 'edit_student_info.php',
         method: 'post',
         data: formData,
         success: function (response) {
