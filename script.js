@@ -290,7 +290,7 @@ function addGradeToDom(studentObj) {
     });
 }
 
-function editGradeInfo(rowIndex) {
+function editStudentInfo(rowIndex) {
     //data to keep locally
     var studentInfo = {
         name: $('#modalStudentGrade').val(),
