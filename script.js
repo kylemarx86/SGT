@@ -261,10 +261,11 @@ function addGradeToDom(studentObj) {
 
     $deleteButton.click(function () {
         var indexOfRow = $(this).parent().index();
+        $(this).text('Deleting');
         removeGrade(indexOfRow);
         //the rest will happen after ajax call sent but before the success of that call (since call will take time to complete)
         //change the status of delete button
-        $(this).text('Deleting');
+        // $(this).text('Deleting');
     });
     $editButton.click(function () {
         var row = $(this).parent();
