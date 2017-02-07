@@ -6,6 +6,19 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
+    <style>
+        .auto-fill-group{
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 6px 12px;
+        }
+        .auto-fill-group .radio-inline:hover{
+            font-weight: bold;
+        }
+        .auto-fill-group:hover{
+            background-color: lightgoldenrodyellow;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -46,11 +59,16 @@
             <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-warning">Add Student</button>
-            <button type="button" class="btn btn-warning">Add Course</button>
+            <button type="button" class="btn btn-primary" onclick="retrieveData()">Retrieve Data From Server</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-primary" onclick="retrieveData()">Retrieve Data From Server</button>
+            <div class="auto-fill-group">
+                Auto-Fill
+                <div class="input-group">
+                    <label class="radio-inline"><input type="radio" name="auto_fill" value="on" checked> On</label>
+                    <label class="radio-inline"><input type="radio" name="auto_fill" value="off"> Off</label>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <div id="statusBar" class="alert"></div>
@@ -99,7 +117,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="btn btn-success" data-dismiss="modal">Edit Grade</button>
+                <!--this button needs an action pointing to the editStudentInfo method-->
+                <button type="btn btn-success" data-dismiss="modal" onclick="editStudentInfo(rowIndex)">Edit Grade</button>
                 <button type="btn btn-warning" data-dismiss="modal">Close</button>
             </div>
         </div>
