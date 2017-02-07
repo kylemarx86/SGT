@@ -17,9 +17,14 @@ var inputIds = [];
  * Listen for the document to load and reset the data to the initial state
  */
 $(document).ready(function() {
-    reset();
+    // reset();
     retrieveData();
-    autorepopulateStudentFields();
+    //turn the auto repopulate button on
+    // autorepopulateStudentFields();
+    $("input[name='auto_fill']").click(changeAutoRepopulateState);
+    // if($('').checked){
+    //     autorepopulateStudentFields();      //for testing and ease of use
+    // }
 });
 
 
@@ -45,7 +50,8 @@ function cancelClicked() {
  */
 function retrieveData() {
     reset();
-    autorepopulateStudentFields();
+    prepareGradeForm();
+    // autorepopulateStudentFields();
     grade_array = [];
 
     $.ajax({
@@ -56,7 +62,7 @@ function retrieveData() {
             // api_key: 'z9KW32X6Ky'
         },
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             if(response.success){
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
@@ -81,6 +87,7 @@ function retrieveData() {
             console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
+            //i should remove this later. i dont want the gibberish
             for(var i = 0; i < response.error.length; i++){
                 $('#statusBar').append('<p>' + response.error[i] + '</p>');
             }
@@ -143,8 +150,15 @@ function addGrade() {
         }
     });
 
-    clearAddGradeForm();              //empty out the add student form
-    autorepopulateStudentFields();      //for testing and ease of use
+    //a better function would be called prepareGradeForm that would determine if grade form should be repopulated or not.
+    //either populate the grade form or empty it out
+    prepareGradeForm();
+    // clearAddGradeForm();              //empty out the add student form
+
+    //if grade is added then check to see if we need to add a new random student in the form
+
+
+        // autorepopulateStudentFields();      //for testing and ease of use
 }
 
 /**
@@ -384,4 +398,22 @@ function autorepopulateStudentFields(){
     $('#course').val(randomActivity);
     $('#studentGrade').val(randomGrade);
     $('button.btn-success').focus();
+}
+
+function changeAutoRepopulateState(){
+    if(this.value === 'on'){
+        autorepopulateStudentFields();
+    }else{
+        clearAddGradeForm();
+    }
+}
+
+function prepareGradeForm(){
+    var auto_fill_value = $("input[name='auto_fill']").val();
+    console.log(auto_fill_value);
+    if($("input[name='auto_fill']:checked").val() === 'on'){
+        autorepopulateStudentFields();
+    }else{
+        clearAddGradeForm();
+    }
 }
