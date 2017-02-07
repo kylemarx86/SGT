@@ -384,7 +384,7 @@ function clearAddGradeForm() {
 }
 
 /**
- * Autopopulates the add student field with randomly generated south park characters, activities, and grades. will also place the focus on the add button.
+ * Autopopulates the add grade fields with randomly generated south park characters, activities, and grades. will also place the focus on the add button.
  */
 function autorepopulateStudentFields(){
     var characterArray = ['Stan Marsh', 'Kyle Broflovski', 'Eric Cartman', 'Kenny McCormick', 'Butters Stotch', 'Wendy Testaburger'];
@@ -400,6 +400,9 @@ function autorepopulateStudentFields(){
     $('button.btn-success').focus();
 }
 
+/**
+ * method to change the fields of the grade form based on whether or not auto-fill is on
+ */
 function changeAutoRepopulateState(){
     if(this.value === 'on'){
         autorepopulateStudentFields();
@@ -408,9 +411,10 @@ function changeAutoRepopulateState(){
     }
 }
 
+/**
+ * method to determine if a new random student's information should be into the grade form
+ */
 function prepareGradeForm(){
-    var auto_fill_value = $("input[name='auto_fill']").val();
-    console.log(auto_fill_value);
     if($("input[name='auto_fill']:checked").val() === 'on'){
         autorepopulateStudentFields();
     }else{
