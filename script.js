@@ -387,9 +387,9 @@ function clearAddGradeForm() {
  * Autopopulates the add grade fields with randomly generated south park characters, activities, and grades. will also place the focus on the add button.
  */
 function autorepopulateStudentFields(){
-    var characterArray = ['Stan Marsh', 'Kyle Broflovski', 'Eric Cartman', 'Kenny McCormick', 'Butters Stotch', 'Wendy Testaburger'];
-    var activityArray = ['Chili cooking', 'Saving Imaginationland', 'Peruvian Pan Fluting', 'Eating Cheesy Poofs', 'Killing Kenny', 'Tap Dancing Accidents'];
-
+    var characterArray = ['Peter Parker', 'Donald Blake', 'Robert Bruce Banner', 'Natasha Romanoff', 'Clint Barton', 'Janet van Dyne', 'Henry Pym', 'Anthony Stark', 'Jacques Duquesne'];
+    var activityArray = ['Web Slinging', 'Wall Crawling', 'Hammer Throwing', 'Thundering', 'Smashing', 'Espionage', 'Archery', 'Flying', 'Stinging', 'Shrinking', 'Growing', 'Sword Fighting', 'Engineering'];
+    
     var randomCharacter = characterArray[Math.floor(Math.random() * characterArray.length)];
     var randomActivity = activityArray[Math.floor(Math.random() * activityArray.length)];
     var randomGrade = Math.floor(Math.random() * 100 + 1);
