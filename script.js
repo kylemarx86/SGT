@@ -1,14 +1,11 @@
 /**
- * Define all global variables here
- */
-/**
- * grade_array - global array to hold student objects
+ * grade_array - global array to hold grade objects
  * @type {Array}
  */
 var grade_array = [];
 
 /**
- * inputIds - id's of the elements that are used to add students
+ * inputIds - IDs of the elements that are used to add grades
  * @type {string[]}
  */
 var inputIds = [];
@@ -17,14 +14,8 @@ var inputIds = [];
  * Listen for the document to load and reset the data to the initial state
  */
 $(document).ready(function() {
-    // reset();
     retrieveData();
-    //turn the auto repopulate button on
-    // autorepopulateStudentFields();
     $("input[name='auto_fill']").click(changeAutoRepopulateState);
-    // if($('').checked){
-    //     autorepopulateStudentFields();      //for testing and ease of use
-    // }
 });
 
 
@@ -32,26 +23,25 @@ $(document).ready(function() {
  * addClicked - Event Handler when user clicks the add button
  */
 function addGradeClicked() {
-    //when clicked the add clicked should create a student object
+    //when clicked the add clicked should create a grade object
     addGrade();
     updateData();
     // $('#studentName').focus();
 }
 
 /**
- * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
+ * cancelClicked - Event Handler when user clicks the cancel button. clear out grade form
  */
 function cancelClicked() {
     clearAddGradeForm();
 }
 
 /**
- *  retrieveData - Event Handler when user clicks the Retrieve Data From Server button, this will clear out the student table and repopulate it with data from the server
+ *  retrieveData - Event Handler when user clicks the Retrieve Data From Server button, this will clear out the grade table and repopulate it with data from the server
  */
 function retrieveData() {
     reset();
     prepareGradeForm();
-    // autorepopulateStudentFields();
     grade_array = [];
 
     $.ajax({
@@ -116,18 +106,18 @@ function addGrade() {
     };
     $.ajax({
         dataType: 'json',
-        // url: 'http://s-apis.learningfuze.com/sgt/create',   //old
         url: 'add_grade.php',   //new
         method: 'post',
         data: formData,
         success: function (response) {
             if(response.success){
+                console.log(response);
                 //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
                 grade_array.push(studentInfo);
                 //add student id to array of inputIds
-                    //need to amend this
+                    //look into the naming of this variable (new_id)
                 inputIds.push(response.new_id);
                 //update the DOM with list of students
                 updateData();
@@ -137,15 +127,15 @@ function addGrade() {
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
-                // console.log(response.errors);
             }
         },
         error: function (response) {
             //update the status bar
             $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-            for(var i = 0; i < response.error.length; i++){
-                $('#statusBar').append('<p>' + response.error[i] + '</p>');
-            }
+                $('#statusBar').append('<p>Unable to reach server.</p>');
+            // for(var i = 0; i < response.error.length; i++){
+            //     $('#statusBar').append('<p>' + response.error[i] + '</p>');
+            // }
             // console.log(response);
         }
     });
@@ -384,7 +374,7 @@ function clearAddGradeForm() {
 }
 
 /**
- * Autopopulates the add grade fields with randomly generated south park characters, activities, and grades. will also place the focus on the add button.
+ * Autopopulates the add grade fields with randomly generated Marvel characters, activities, and grades. will also place the focus on the add button.
  */
 function autorepopulateStudentFields(){
     var characterArray = ['Peter Parker', 'Donald Blake', 'Robert Bruce Banner', 'Natasha Romanoff', 'Clint Barton', 'Janet van Dyne', 'Henry Pym', 'Anthony Stark', 'Jacques Duquesne'];
