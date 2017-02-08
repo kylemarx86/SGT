@@ -1,14 +1,11 @@
 /**
- * Define all global variables here
- */
-/**
- * grade_array - global array to hold student objects
+ * grade_array - global array to hold grade objects
  * @type {Array}
  */
 var grade_array = [];
 
 /**
- * inputIds - id's of the elements that are used to add students
+ * inputIds - IDs of the elements that are used to add grades
  * @type {string[]}
  */
 var inputIds = [];
@@ -17,9 +14,8 @@ var inputIds = [];
  * Listen for the document to load and reset the data to the initial state
  */
 $(document).ready(function() {
-    reset();
     retrieveData();
-    autorepopulateStudentFields();
+    $("input[name='auto_fill']").click(changeAutoRepopulateState);
 });
 
 
@@ -27,25 +23,25 @@ $(document).ready(function() {
  * addClicked - Event Handler when user clicks the add button
  */
 function addGradeClicked() {
-    //when clicked the add clicked should create a student object
+    //when clicked the add clicked should create a grade object
     addGrade();
     updateData();
     // $('#studentName').focus();
 }
 
 /**
- * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
+ * cancelClicked - Event Handler when user clicks the cancel button. clear out grade form
  */
 function cancelClicked() {
     clearAddGradeForm();
 }
 
 /**
- *  retrieveData - Event Handler when user clicks the Retrieve Data From Server button, this will clear out the student table and repopulate it with data from the server
+ *  retrieveData - Event Handler when user clicks the Retrieve Data From Server button, this will clear out the grade table and repopulate it with data from the server
  */
 function retrieveData() {
     reset();
-    autorepopulateStudentFields();
+    prepareGradeForm();
     grade_array = [];
 
     $.ajax({
@@ -56,7 +52,7 @@ function retrieveData() {
             // api_key: 'z9KW32X6Ky'
         },
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             if(response.success){
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
@@ -81,6 +77,7 @@ function retrieveData() {
             console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
+            //i should remove this later. i dont want the gibberish
             for(var i = 0; i < response.error.length; i++){
                 $('#statusBar').append('<p>' + response.error[i] + '</p>');
             }
@@ -109,18 +106,18 @@ function addGrade() {
     };
     $.ajax({
         dataType: 'json',
-        // url: 'http://s-apis.learningfuze.com/sgt/create',   //old
         url: 'add_grade.php',   //new
         method: 'post',
         data: formData,
         success: function (response) {
             if(response.success){
+                console.log(response);
                 //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
                 grade_array.push(studentInfo);
                 //add student id to array of inputIds
-                    //need to amend this
+                    //look into the naming of this variable (new_id)
                 inputIds.push(response.new_id);
                 //update the DOM with list of students
                 updateData();
@@ -130,21 +127,28 @@ function addGrade() {
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
-                // console.log(response.errors);
             }
         },
         error: function (response) {
             //update the status bar
             $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-            for(var i = 0; i < response.error.length; i++){
-                $('#statusBar').append('<p>' + response.error[i] + '</p>');
-            }
+                $('#statusBar').append('<p>Unable to reach server.</p>');
+            // for(var i = 0; i < response.error.length; i++){
+            //     $('#statusBar').append('<p>' + response.error[i] + '</p>');
+            // }
             // console.log(response);
         }
     });
 
-    clearAddGradeForm();              //empty out the add student form
-    autorepopulateStudentFields();      //for testing and ease of use
+    //a better function would be called prepareGradeForm that would determine if grade form should be repopulated or not.
+    //either populate the grade form or empty it out
+    prepareGradeForm();
+    // clearAddGradeForm();              //empty out the add student form
+
+    //if grade is added then check to see if we need to add a new random student in the form
+
+
+        // autorepopulateStudentFields();      //for testing and ease of use
 }
 
 /**
@@ -370,12 +374,12 @@ function clearAddGradeForm() {
 }
 
 /**
- * Autopopulates the add student field with randomly generated south park characters, activities, and grades. will also place the focus on the add button.
+ * Autopopulates the add grade fields with randomly generated Marvel characters, activities, and grades. will also place the focus on the add button.
  */
 function autorepopulateStudentFields(){
-    var characterArray = ['Stan Marsh', 'Kyle Broflovski', 'Eric Cartman', 'Kenny McCormick', 'Butters Stotch', 'Wendy Testaburger'];
-    var activityArray = ['Chili cooking', 'Saving Imaginationland', 'Peruvian Pan Fluting', 'Eating Cheesy Poofs', 'Killing Kenny', 'Tap Dancing Accidents'];
-
+    var characterArray = ['Peter Parker', 'Donald Blake', 'Robert Bruce Banner', 'Natasha Romanoff', 'Clint Barton', 'Janet van Dyne', 'Henry Pym', 'Anthony Stark', 'Jacques Duquesne'];
+    var activityArray = ['Web Slinging', 'Wall Crawling', 'Hammer Throwing', 'Thundering', 'Smashing', 'Espionage', 'Archery', 'Flying', 'Stinging', 'Shrinking', 'Growing', 'Sword Fighting', 'Engineering'];
+    
     var randomCharacter = characterArray[Math.floor(Math.random() * characterArray.length)];
     var randomActivity = activityArray[Math.floor(Math.random() * activityArray.length)];
     var randomGrade = Math.floor(Math.random() * 100 + 1);
@@ -384,4 +388,26 @@ function autorepopulateStudentFields(){
     $('#course').val(randomActivity);
     $('#studentGrade').val(randomGrade);
     $('button.btn-success').focus();
+}
+
+/**
+ * method to change the fields of the grade form based on whether or not auto-fill is on
+ */
+function changeAutoRepopulateState(){
+    if(this.value === 'on'){
+        autorepopulateStudentFields();
+    }else{
+        clearAddGradeForm();
+    }
+}
+
+/**
+ * method to determine if a new random student's information should be into the grade form
+ */
+function prepareGradeForm(){
+    if($("input[name='auto_fill']:checked").val() === 'on'){
+        autorepopulateStudentFields();
+    }else{
+        clearAddGradeForm();
+    }
 }
