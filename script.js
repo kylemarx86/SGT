@@ -141,7 +141,51 @@ function addGrade() {
     //either populate the grade form or empty it out
     prepareGradeForm();
 }
+/**
+ * editGradeInfo - method to edit an existing grade in the db
+ */
+function editGradeInfo(rowIndex) {
+    //data to keep locally
+    var gradeInfo = {
+        id: inputIds[rowIndex],
+        name: $('#modalStudentName').val(),
+        course: $('#modalCourse').val(),
+        grade: $('#modalStudentGrade').val(),
+    };   
+    //data to send the server
+    var formData = {
+        id: inputIds[rowIndex],
+        grade: parseInt(gradeInfo.grade)
+    };
 
+    $.ajax({
+        dataType: 'json',
+        url: 'edit_grade.php',
+        method: 'post',
+        data: formData,
+        success: function (response) {
+            if(response.success){
+                //update student info in array of students
+                grade_array[rowIndex].grade = response.new_grade;
+                //update the DOM with list of students
+                updateData();
+                //update status bar
+                $('#statusBar').text('Grade for ' + gradeInfo.name + ' was successfully edited.').removeClass('alert-warning alert-info').addClass('alert-success');
+            }else{
+                //update the status bar
+                $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                }
+            }
+        },
+        error: function (response) {
+            //update the status bar
+            $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+            $('#statusBar').append('<p>Could not connect to server.</p>');
+        }
+    });
+}
 /**
  * removeGrade - removes a given student from the grade_array, then updates the list of students on the DOM
  * @param {number} rowIndex
@@ -150,7 +194,6 @@ function removeGrade(rowIndex) {
     var studentId = inputIds[rowIndex];
 
     var formData = {
-        // api_key: 'z9KW32X6Ky',   //old
         student_id: studentId
     };
 
@@ -261,67 +304,7 @@ function addGradeToDom(studentObj) {
     });
 }
 
-/**
- * editGradeInfo - method to edit an existing grade in the db
- */
-function editGradeInfo(rowIndex) {
-    // console.log('going to edit info on row number ' + rowIndex);
-    
-    //data to keep locally
-    var gradeInfo = {
-        id: inputIds[rowIndex],
-        name: $('#modalStudentName').val(),
-        course: $('#modalCourse').val(),
-        grade: $('#modalStudentGrade').val(),
-    };
-    
-    // console.log($('#modalStudentName').val());
 
-    //data to send the server
-    var formData = {
-        id: inputIds[rowIndex],
-        // name: gradeInfo.name,
-        // course: gradeInfo.course,
-        grade: parseInt(gradeInfo.grade)
-    };
-
-    // console.log(formData.id);
-    // console.log(formData.grade);
-    // console.log('inputIds: ',inputIds);
-    // console.log('grade_array: ', grade_array);
-    $.ajax({
-        dataType: 'json',
-        url: 'edit_grade.php',
-        method: 'post',
-        data: formData,
-        success: function (response) {
-            if(response.success){
-                console.log(response);
-
-                //update status bar
-                $('#statusBar').text('Grade for ' + gradeInfo.name + ' was successfully edited.').removeClass('alert-warning alert-info').addClass('alert-success');
-
-                //update student info in array of students
-                grade_array[rowIndex].grade = response.new_grade;
-
-                //update the DOM with list of students
-                updateData();
-            }else{
-                //update the status bar
-                $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-                for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
-                }
-                // console.log(response.errors);
-            }
-        },
-        error: function (response) {
-            //update the status bar
-            $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-            $('#statusBar').append('<p>Could not connect to server.</p>');
-        }
-    });
-}
 
 /**
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
