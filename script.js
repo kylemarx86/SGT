@@ -106,7 +106,7 @@ function addGrade() {
     };
     $.ajax({
         dataType: 'json',
-        url: 'add_grade.php',   //new
+        url: 'add_grade.php',
         method: 'post',
         data: formData,
         success: function (response) {
@@ -136,21 +136,56 @@ function addGrade() {
             // for(var i = 0; i < response.error.length; i++){
             //     $('#statusBar').append('<p>' + response.error[i] + '</p>');
             // }
-            // console.log(response);
         }
     });
-
-    //a better function would be called prepareGradeForm that would determine if grade form should be repopulated or not.
     //either populate the grade form or empty it out
     prepareGradeForm();
-    // clearAddGradeForm();              //empty out the add student form
-
-    //if grade is added then check to see if we need to add a new random student in the form
-
-
-        // autorepopulateStudentFields();      //for testing and ease of use
 }
+/**
+ * editGradeInfo - method to edit an existing grade in the db
+ */
+function editGradeInfo(rowIndex) {
+    //data to keep locally
+    var gradeInfo = {
+        id: inputIds[rowIndex],
+        name: $('#modalStudentName').val(),
+        course: $('#modalCourse').val(),
+        grade: $('#modalStudentGrade').val(),
+    };   
+    //data to send the server
+    var formData = {
+        id: inputIds[rowIndex],
+        grade: parseInt(gradeInfo.grade)
+    };
 
+    $.ajax({
+        dataType: 'json',
+        url: 'edit_grade.php',
+        method: 'post',
+        data: formData,
+        success: function (response) {
+            if(response.success){
+                //update student info in array of students
+                grade_array[rowIndex].grade = response.new_grade;
+                //update the DOM with list of students
+                updateData();
+                //update status bar
+                $('#statusBar').text('Grade for ' + gradeInfo.name + ' was successfully edited.').removeClass('alert-warning alert-info').addClass('alert-success');
+            }else{
+                //update the status bar
+                $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                }
+            }
+        },
+        error: function (response) {
+            //update the status bar
+            $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+            $('#statusBar').append('<p>Could not connect to server.</p>');
+        }
+    });
+}
 /**
  * removeGrade - removes a given student from the grade_array, then updates the list of students on the DOM
  * @param {number} rowIndex
@@ -159,19 +194,16 @@ function removeGrade(rowIndex) {
     var studentId = inputIds[rowIndex];
 
     var formData = {
-        // api_key: 'z9KW32X6Ky',   //old
         student_id: studentId
     };
 
     $.ajax({
         dataType: 'json',
-        // url: 'https://s-apis.learningfuze.com/sgt/delete',  //old
         url: 'delete_grade.php',
         method: 'post',
         data: formData,
         success: function (response) {
             if(response.success){
-                console.log(response);
                 //update status bar (remember student has been removed remotely but not locally)
                 $('#statusBar').text('Student ' + grade_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
                 //remove the student locally
@@ -180,21 +212,12 @@ function removeGrade(rowIndex) {
                 //update the DOM
                 updateData();
             }else{
-                console.log(response);
                 $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
                 //change the text of the button that was clicked back to delete
                 $('tbody').find('button.btn-danger').eq(rowIndex).text('Delete');
-
-                //old attempts to change the wording of the delete button
-                // $('tbody').find('button:eq(rowIndex)').text('Delete');    //
-                // $('tr').eq(rowIndex).find('button').text('Delete');    //
-                // $('tr:eq(rowIndex) > button').text('Delete');            //
-                // $('tbody > button:eq(rowIndex)').text('Delete');    //button is not the direct descendant of of the tbody, it is of the tr
-                // $('tbody > button:eq(rowIndex)').text('Delete');         //button is not the direct descendant of of the tbody, it is of the tr
-                // $('button.btn-danger:nth-of-type(rowIndex)').text('Delete');    //
             }
         },
         error: function(response){
@@ -267,82 +290,21 @@ function addGradeToDom(studentObj) {
         removeGrade(indexOfRow);
     });
     $editButton.click(function () {
-        var row = $(this).parent();
-        // var indexOfRow = $(this).parent().index();
-        var indexOfRow = row.index();
+        var indexOfRow = $(this).parent().parent().index();
 
-        // console.log('this student: ', grade_array[indexOfRow].name);
-        // console.log('this course: ', grade_array[indexOfRow].course);
-        // console.log('this grade: ', grade_array[indexOfRow].grade);
-        // console.log('edit button clicked');
         var modal = $('#editModal');
         modal.modal('show');
         $('#modalStudentName').val(grade_array[indexOfRow].name);
         $('#modalCourse').val(grade_array[indexOfRow].course);
         $('#modalStudentGrade').val(grade_array[indexOfRow].grade);
 
-        // $('#modalCourse').attr(placeholder, )
-
-        //need another click handler for the edit/submit button on edit modal
-
-        //write code for edit here
-        //create modal for info to edit with submit button. submit button should check to see if
-        // editGradeInfo(indexOfRow)
-
-        //start here
-        //need to store the rowIndex in a variable that can somehow be passed into the editStudentInfo method without the use of parameter in the index file
-
+        $('#submit').click(function(){
+            editGradeInfo(indexOfRow);
+        });
     });
 }
 
-function editStudentInfo(rowIndex) {
-    //data to keep locally
-    var studentInfo = {
-        id: inputIds[rowIndex],
-        name: $('#modalStudentGrade').val(),
-        course: $('#modalCourse').val(),
-        grade: $('#modalStudentGrade').val(),
-    };
-    //data to send the server
-    var formData = {
-        name: studentInfo.name,
-        course: studentInfo.course,
-        grade: parseInt(studentInfo.grade)
-    };
-    $.ajax({
-        dataType: 'json',
-        url: 'edit_student_info.php',
-        method: 'post',
-        data: formData,
-        success: function (response) {
-            if(response.success){
-                //update status bar
-                $('#statusBar').text(studentInfo.name + ' was successfully edited').removeClass('alert-warning alert-info').addClass('alert-success');
 
-                //may not need this
-                //update student info in array of students
-
-
-                //update the DOM with list of students
-                updateData();
-            }else{
-                //update the status bar
-                $('#statusBar').text('Failed to edit student info for ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-                for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
-                }
-                // console.log(response.errors);
-            }
-        },
-        error: function (response) {
-            //update the status bar
-            $('#statusBar').text('Failed to edit student info for ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-            for(var i = 0; i < response.errors.length; i++){
-                $('#statusBar').append('<p>' + response.errors[i] + '</p>');
-            }
-        }
-    });
-}
 
 /**
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
