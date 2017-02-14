@@ -50,6 +50,7 @@ function retrieveData() {
         method: 'post',
         success: function (response) {
             if(response.success){
+                console.log(response);
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
                         name: response.data[i].student,
@@ -62,6 +63,7 @@ function retrieveData() {
                 $('#statusBar').text('Student grade table successfully loaded.').removeClass('alert-success alert-warning').addClass('alert-info');
                 updateData();
             }else{
+                console.log(response);
                 //update the status bar
                 $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
@@ -70,6 +72,7 @@ function retrieveData() {
             }
         },
         error: function (response) {
+            console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
             $('#statusBar').append('<p>Could not connect to server.</p>');
@@ -103,6 +106,7 @@ function addGrade() {
         data: formData,
         success: function (response) {
             if(response.success){
+                console.log(response);
                 //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
@@ -113,6 +117,7 @@ function addGrade() {
                 //update the DOM with list of students
                 updateData();
             }else{
+                console.log(response);
                 //update the status bar
                 $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
@@ -121,6 +126,7 @@ function addGrade() {
             }
         },
         error: function (response) {
+            console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
             $('#statusBar').append('<p>Unable to reach server.</p>');
@@ -153,6 +159,7 @@ function editGradeInfo(rowIndex) {
         data: formData,
         success: function (response) {
             if(response.success){
+                console.log(response);
                 //update student info in array of students
                 grade_array[rowIndex].grade = response.new_grade;
                 //update the DOM with list of students
@@ -160,6 +167,7 @@ function editGradeInfo(rowIndex) {
                 //update status bar
                 $('#statusBar').text('Grade for ' + gradeInfo.name + ' was successfully edited.').removeClass('alert-warning alert-info').addClass('alert-success');
             }else{
+                console.log(response);
                 //update the status bar
                 $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
@@ -168,6 +176,7 @@ function editGradeInfo(rowIndex) {
             }
         },
         error: function (response) {
+            console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
             $('#statusBar').append('<p>Could not connect to server.</p>');
@@ -192,6 +201,7 @@ function removeGrade(rowIndex) {
         data: formData,
         success: function (response) {
             if(response.success){
+                console.log(response);
                 //update status bar (remember student has been removed remotely but not locally)
                 $('#statusBar').text('Student ' + grade_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
                 //remove the student locally
@@ -200,6 +210,7 @@ function removeGrade(rowIndex) {
                 //update the DOM
                 updateData();
             }else{
+                console.log(response);
                 $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append('<p>' + response.errors[i] + '</p>');
@@ -209,6 +220,7 @@ function removeGrade(rowIndex) {
             }
         },
         error: function(response){
+            console.log(response);
             //update status bar
             $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
             $('#statusBar').append('<p>Could not connect to server.</p>');
