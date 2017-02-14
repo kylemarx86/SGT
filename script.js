@@ -48,11 +48,7 @@ function retrieveData() {
         dataType: 'json',
         url: 'read.php',
         method: 'post',
-        data: {
-            // api_key: 'z9KW32X6Ky'
-        },
         success: function (response) {
-            // console.log(response);
             if(response.success){
                 for (var i = 0; i < response.data.length; i++) {
                     var student_info = {
@@ -74,7 +70,6 @@ function retrieveData() {
             }
         },
         error: function (response) {
-            console.log(response);
             //update the status bar
             $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
             //i should remove this later. i dont want the gibberish
@@ -99,7 +94,6 @@ function addGrade() {
     };
     //data to send the server
     var formData = {
-        // api_key: 'z9KW32X6Ky',   //old
         name: studentInfo.name,
         course: studentInfo.course,
         grade: parseInt(studentInfo.grade)
@@ -111,7 +105,6 @@ function addGrade() {
         data: formData,
         success: function (response) {
             if(response.success){
-                console.log(response);
                 //update status bar
                 $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
@@ -132,10 +125,7 @@ function addGrade() {
         error: function (response) {
             //update the status bar
             $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-                $('#statusBar').append('<p>Unable to reach server.</p>');
-            // for(var i = 0; i < response.error.length; i++){
-            //     $('#statusBar').append('<p>' + response.error[i] + '</p>');
-            // }
+            $('#statusBar').append('<p>Unable to reach server.</p>');
         }
     });
     //either populate the grade form or empty it out
@@ -284,7 +274,6 @@ function addGradeToDom(studentObj) {
     $('tbody tr:last').append($editButtonTd);
 
     $deleteButton.click(function () {
-        console.log($(this));
         var indexOfRow = $(this).parent().parent().index();
         $(this).text('Deleting');
         removeGrade(indexOfRow);
@@ -303,8 +292,6 @@ function addGradeToDom(studentObj) {
         });
     });
 }
-
-
 
 /**
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
