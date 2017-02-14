@@ -64,18 +64,16 @@ function retrieveData() {
             }else{
                 //update the status bar
                 $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
-                for(var i = 0; i < response.error.length; i++){
-                    $('#statusBar').append('<p>' + response.error[i] + '</p>');
+                for(var i = 0; i < response.errors.length; i++){
+                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
                 }
             }
         },
         error: function (response) {
             //update the status bar
             $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
-            //i should remove this later. i dont want the gibberish
-            for(var i = 0; i < response.error.length; i++){
-                $('#statusBar').append('<p>' + response.error[i] + '</p>');
-            }
+            $('#statusBar').append('<p>Could not connect to server.</p>');
+            
         }
     });
 }
