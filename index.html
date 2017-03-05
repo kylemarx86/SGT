@@ -6,52 +6,82 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
+    <style>
+        .auto-fill-group{
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 6px 12px;
+        }
+        .auto-fill-group .radio-inline:hover{
+            font-weight: bold;
+        }
+        .auto-fill-group:hover{
+            background-color: lightgoldenrodyellow;
+        }
+    </style>
 </head>
 <body>
-<div class="">
-    <div class="">
+<div class="container">
+    <div class="page-header">
         <!-- only show this element when the isnt on mobile -->
-        <h1>Student Grade Table
-            <small>Grade Average : <span class="avgGrade"></span></small>
+        <h1 class="hidden-xs">Student Grade Table
+            <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
         </h1>
         <!-- only show this element when the user gets to a mobile version -->
-        <h3>Student Grade Table
-            <small>Grade Average : <span class="avgGrade"></span></small>
+        <h3 class="visible-xs">Student Grade Table
+            <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
         </h3>
     </div>
-    <div class="student-add-form">
+    <div class="student-add-form form-group row col-sm-4 pull-right">
         <h4>Add Student</h4>
-        <div>
-            <span>
-                <span class="glyphicon"></span>
+        <div class="form-group input-group">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-user"></span>
             </span>
-            <input type="text" class="" name="studentName" id="studentName" placeholder="Student Name">
+            <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
         </div>
-        <div class="">
-            <span class="">
-                <span class="glyphicon"></span>
+        <div class="form-group input-group">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-list-alt"></span>
             </span>
-            <input type="text" class="" name="course" id="course"
+            <input type="text" class="form-control" name="course" id="course"
                    placeholder="Student Course">
         </div>
-        <div class="">
-            <span class="">
-                <span class="glyphicon"></span>
+        <div class="form-group input-group">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-education"></span>
             </span>
-            <input type="text" class="" name="studentGrade" id="studentGrade"
+            <input type="text" class="form-control" name="studentGrade" id="studentGrade"
                    placeholder="Student Grade">
         </div>
-        <button type="button" class="" onclick="">Add</button>
-        <button type="button" class="" onclick="">Cancel</button>
+        <div class="form-group">
+            <button type="button" class="btn btn-success" onclick="addGradeClicked()">Add Grade</button>
+            <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="retrieveData()">Retrieve Data From Server</button>
+        </div>
+        <div class="form-group">
+            <div class="auto-fill-group">
+                Auto-Fill
+                <div class="input-group">
+                    <label class="radio-inline"><input type="radio" name="auto_fill" value="on" checked> On</label>
+                    <label class="radio-inline"><input type="radio" name="auto_fill" value="off"> Off</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div id="statusBar" class="alert"></div>
+        </div>
     </div>
-    <div class="student-list-container">
-        <table class="student-list">
+    <div class="student-list-container col-sm-8">
+        <table class="student-list table">
             <thead>
             <tr>
                 <th>Student Name</th>
-                <th>Student Course</th>
-                <th>Student Grade</th>
-                <th>Operations</th>
+                <th>Course</th>
+                <th>Grade</th>
+                <th colspan="2">Operations</th>
             </tr>
             </thead>
             <tbody>
@@ -59,6 +89,40 @@
         </table>
     </div>
 </div>
+
+<!--Modal-->
+<div class="modal fade" id="editModal" role="dialog">
+    <div class="modal-dialog">
+        <!--modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <form>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span> Student Name</span>
+                            <input type="text" class="form-control" name="studentName" id="modalStudentName" placeholder="Student Name" DISABLED >
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-list-alt"></span> Course</span>
+                            <input type="text" class="form-control" name="course" id="modalCourse" DISABLED>
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-education"></span> Grade</span>
+                            <input type="text" class="form-control" name="studentGrade" id="modalStudentGrade" placeholder="Student Grade">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--this button needs an action pointing to the editGradeInfo method-->
+                <button type="btn btn-success" data-dismiss="modal" id='submit'>Edit Grade</button>
+                <button type="btn btn-warning" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
