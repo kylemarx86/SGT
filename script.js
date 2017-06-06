@@ -17,6 +17,9 @@ $(document).ready(function() {
     retrieveData();
     // $("input[name='auto_fill']").click(changeAutoRepopulateState);
     $("input[name='auto_fill']").on('click touch', changeAutoRepopulateState);
+    $('.addGrade').on('click touch', addGradeClicked);
+    $('.cancelClick').on('click touch', cancelClicked);
+    $('.retrieveData').on('click touch', retrieveData);
 });
 
 

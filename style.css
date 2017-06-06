@@ -1,3 +1,17 @@
-.radio-inline > input{
+/*.radio-inline > input{
+    cursor: pointer;
+}*/
+.auto-fill-group{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 6px 12px;
+}
+.auto-fill-group .radio-inline:hover{
+    font-weight: bold;
+}
+.auto-fill-group:hover{
+    background-color: lightgoldenrodyellow;
+}
+.pointable {
     cursor: pointer;
 }
