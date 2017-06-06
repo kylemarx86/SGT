@@ -6,7 +6,7 @@ var grade_array = [];
 
 /**
  * inputIds - IDs of the elements that are used to add grades
- * @type {string[]}
+ * @type {number[]}
  */
 var inputIds = [];
 
