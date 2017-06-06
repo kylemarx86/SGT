@@ -15,7 +15,8 @@ var inputIds = [];
  */
 $(document).ready(function() {
     retrieveData();
-    $("input[name='auto_fill']").click(changeAutoRepopulateState);
+    // $("input[name='auto_fill']").click(changeAutoRepopulateState);
+    $("input[name='auto_fill']").on('click touch', changeAutoRepopulateState);
 });
 
 
