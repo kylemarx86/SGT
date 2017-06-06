@@ -65,7 +65,7 @@ function retrieveData() {
                 //update the status bar
                 $('#statusBar').text('Failed to load student grade table.').removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                    $('#statusBar').append(`<p>${response.errors[i]}</p>`);
                 }
             }
         },
@@ -114,16 +114,16 @@ function addGrade() {
                 updateData();
             }else{
                 //update the status bar
-                $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+                $('#statusBar').text(`Failed to add grade for student ${studentInfo.name}.`).removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                    $('#statusBar').append(`<p>${response.errors[i]}</p>`);
                 }
             }
         },
         error: function (response) {
             //update the status bar
-            $('#statusBar').text('Failed to add grade for student ' + studentInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
-            $('#statusBar').append('<p>Unable to reach server.</p>');
+            $('#statusBar').text(`Failed to add grade for student ${studentInfo.name}.`).removeClass('alert-success alert-info').addClass('alert-warning');
+            $('#statusBar').append(`<p>Unable to reach server.</p>`);
         }
     });
     //either populate the grade form or empty it out
@@ -158,18 +158,18 @@ function editGradeInfo(rowIndex) {
                 //update the DOM with list of students
                 updateData();
                 //update status bar
-                $('#statusBar').text('Grade for ' + gradeInfo.name + ' was successfully edited.').removeClass('alert-warning alert-info').addClass('alert-success');
+                $('#statusBar').text(`Grade for ${gradeInfo.name} was successfully edited.`).removeClass('alert-warning alert-info').addClass('alert-success');
             }else{
                 //update the status bar
-                $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+                $('#statusBar').text(`Failed to edit student info for ${gradeInfo.name}.`).removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                    $('#statusBar').append(`<p>${response.errors[i]}</p>`);
                 }
             }
         },
         error: function (response) {
             //update the status bar
-            $('#statusBar').text('Failed to edit student info for ' + gradeInfo.name + '.').removeClass('alert-success alert-info').addClass('alert-warning');
+            $('#statusBar').text(`Failed to edit student info for ${gradeInfo.name}.`).removeClass('alert-success alert-info').addClass('alert-warning');
             $('#statusBar').append('<p>Could not connect to server.</p>');
         }
     });
@@ -193,16 +193,16 @@ function removeGrade(rowIndex) {
         success: function (response) {
             if(response.success){
                 //update status bar (remember student has been removed remotely but not locally)
-                $('#statusBar').text('Student ' + grade_array[rowIndex].name + ' successfully removed').removeClass('alert-info alert-warning').addClass('alert-success');
+                $('#statusBar').text(`Student ${grade_array[rowIndex].name} successfully removed.`).removeClass('alert-info alert-warning').addClass('alert-success');
                 //remove the student locally
                 grade_array.splice(rowIndex, 1);
                 inputIds.splice(rowIndex, 1);
                 //update the DOM
                 updateData();
             }else{
-                $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
+                $('#statusBar').text(`Could not remove student ${grade_array[rowIndex].name}.`).removeClass('alert-success alert-success').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
-                    $('#statusBar').append('<p>' + response.errors[i] + '</p>');
+                    $('#statusBar').append(`<p>${response.errors[i]}</p>`);
                 }
                 //change the text of the button that was clicked back to delete
                 $('tbody').find('button.btn-danger').eq(rowIndex).text('Delete');
@@ -210,7 +210,7 @@ function removeGrade(rowIndex) {
         },
         error: function(response){
             //update status bar
-            $('#statusBar').text('Could not remove student ' + grade_array[rowIndex].name).removeClass('alert-success alert-success').addClass('alert-warning');
+            $('#statusBar').text(`Could not remove student ${grade_array[rowIndex].name}.`).removeClass('alert-success alert-success').addClass('alert-warning');
             $('#statusBar').append('<p>Could not connect to server.</p>');
             //change the text of the button that was clicked back to delete
             $('tbody').find('button.btn-danger').eq(rowIndex).text('Delete');
@@ -260,9 +260,9 @@ function updateStudentList() {
  */
 function addGradeToDom(studentObj) {
     $('tbody').append('<tr></tr>');
-    $('tbody tr:last').append('<td>' + studentObj.name + '</td>');
-    $('tbody tr:last').append('<td>' + studentObj.course + '</td>');
-    $('tbody tr:last').append('<td>' + studentObj.grade + '</td>');
+    $('tbody tr:last').append(`<td>${studentObj.name}</td>`);
+    $('tbody tr:last').append(`<td>${studentObj.course}</td>`);
+    $('tbody tr:last').append(`<td>${studentObj.grade}</td>`);
     var $deleteButton = $('<button>').addClass('btn btn-danger').text('Delete');
     var $deleteButtonTd = $('<td>').append($deleteButton);
     $('tbody tr:last').append($deleteButtonTd);
