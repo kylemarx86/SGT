@@ -4,6 +4,7 @@
 .radio-inline{
     vertical-align: top;
     padding-left: 0;
+    margin-right: 5px;
 }
 input[type='radio']{
     margin-right: 10px;
