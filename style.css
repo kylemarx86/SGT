@@ -3,6 +3,10 @@
 }*/
 .radio-inline{
     vertical-align: top;
+    padding-left: 0;
+}
+input[type='radio']{
+    margin-right: 10px;
 }
 .auto-fill-group{
     border: 1px solid black;
