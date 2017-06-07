@@ -1,17 +1,21 @@
 /*.radio-inline > input{
     cursor: pointer;
 }*/
+.radio-inline{
+    vertical-align: top;
+}
 .auto-fill-group{
     border: 1px solid black;
     border-radius: 5px;
     padding: 6px 12px;
-}
-.auto-fill-group .radio-inline:hover{
-    font-weight: bold;
 }
 .auto-fill-group:hover{
     background-color: lightgoldenrodyellow;
 }
 .pointable {
     cursor: pointer;
+}
+
+.ui-radio{
+    display: inline-block;
 }
