@@ -16,7 +16,6 @@ $course_result = mysqli_query($conn, $course_query);
 
 if(mysqli_num_rows($course_result)){
     print('we already have a class named '.$course);
-//    $new_query = ""
 }else{
     echo 'we need to add this class '.$course;
     $add_course_query = "INSERT INTO `courses` SET name = ".$course;
@@ -44,5 +43,4 @@ if(0 < $grade && $grade <= 100){
     print("<br>that is an invalid grade.");
 }
 
-//mr conners wrestling
 ?>

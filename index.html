@@ -1,24 +1,19 @@
 <!doctype html>
 <html>
 <head>
+    <!--<link rel='stylesheet' href="style.css">-->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel='stylesheet' href="style.css">
+    <!--<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">-->
+    <!--jQuery script-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!--jQuery mobile script-->
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <!--Bootstrap script-->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    
     <script src="script.js"></script>
-    <meta name="viewport" content="initial-scale=1, user-scalable=no">
-    <style>
-        .auto-fill-group{
-            border: 1px solid black;
-            border-radius: 5px;
-            padding: 6px 12px;
-        }
-        .auto-fill-group .radio-inline:hover{
-            font-weight: bold;
-        }
-        .auto-fill-group:hover{
-            background-color: lightgoldenrodyellow;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
 <div class="container">
@@ -55,18 +50,26 @@
                    placeholder="Student Grade">
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-success" onclick="addGradeClicked()">Add Grade</button>
-            <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
+            <!--<button type="button" class="btn btn-success" onclick="addGradeClicked()">Add Grade</button>-->
+            <button type="button" class="btn btn-success addGrade">Add Grade</button>
+            <!--<button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>-->
+            <button type="button" class="btn btn-default cancelClick">Cancel</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-primary" onclick="retrieveData()">Retrieve Data From Server</button>
+            <!--<button type="button" class="btn btn-primary" onclick="retrieveData()">Retrieve Data From Server</button>-->
+            <button type="button" class="btn btn-primary retrieveData">Retrieve Data From Server</button>
         </div>
         <div class="form-group">
             <div class="auto-fill-group">
                 Auto-Fill
                 <div class="input-group">
-                    <label class="radio-inline"><input type="radio" name="auto_fill" value="on" checked> On</label>
-                    <label class="radio-inline"><input type="radio" name="auto_fill" value="off"> Off</label>
+                    
+                    <input type="radio" class="pointable" name="auto_fill" value="on" id='autoFillOn' checked>
+                    <label class="radio-inline" for='autoFillOn'>On</label>
+                    <input type="radio" class="pointable" name="auto_fill" value="off" id='autoFillOff'>
+                    <label class="radio-inline" for='autoFillOff'>Off</label>
+                    
+                    <!--<label class="radio-inline"><input type="radio" class="pointable" name="auto_fill" value="off"> Off</label>-->
                 </div>
             </div>
         </div>
