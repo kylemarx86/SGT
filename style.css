@@ -1,0 +1,29 @@
+.pointable {
+    cursor: pointer;
+}
+/* style for auto-fill */
+.auto-fill-group{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 6px 12px;
+}
+.auto-fill-group:hover{
+    background-color: lightgoldenrodyellow;
+}
+.radio-inline{
+    vertical-align: top;
+    padding-left: 0;
+    margin-right: 5px;
+}
+input[type='radio']{
+    margin-right: 10px;
+}
+
+/*added style for student list */
+.student-list-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.student-list .btn {
+    padding: 6px 9px;
+}
