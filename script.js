@@ -108,7 +108,7 @@ function addGrade() {
         success: function (response) {
             if(response.success){
                 //update status bar
-                $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
+                $('#statusBar').text(`${studentInfo.name} was successfully added.`).removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
                 grade_array.push(studentInfo);
                 //add student id to array of inputIds
