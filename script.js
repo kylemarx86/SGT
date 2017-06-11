@@ -108,7 +108,7 @@ function addGrade() {
         success: function (response) {
             if(response.success){
                 //update status bar
-                $('#statusBar').text(studentInfo.name + ' was successfully added').removeClass('alert-warning alert-info').addClass('alert-success');
+                $('#statusBar').text(`${studentInfo.name} was successfully added.`).removeClass('alert-warning alert-info').addClass('alert-success');
                 //add student info to array of students
                 grade_array.push(studentInfo);
                 //add student id to array of inputIds
@@ -117,8 +117,9 @@ function addGrade() {
                 //update the DOM with list of students
                 updateData();
             }else{
+                var nameErrorExists = response.errors.includes('Student name cannot be empty.');
                 //update the status bar
-                $('#statusBar').text(`Failed to add grade for student ${studentInfo.name}.`).removeClass('alert-success alert-info').addClass('alert-warning');
+                $('#statusBar').text(`Failed to add grade${nameErrorExists ? '' : ' for student ' + studentInfo.name}.`).removeClass('alert-success alert-info').addClass('alert-warning');
                 for(var i = 0; i < response.errors.length; i++){
                     $('#statusBar').append(`<p>${response.errors[i]}</p>`);
                 }
