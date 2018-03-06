@@ -1,5 +1,5 @@
 # Overview
-A content management system for 
+A content management system to organize students across courses with CRUD funcitonality. Built-in auto-fill option exists to allow for testing and quick filling of multiple data points.
 
 # Version History
 
